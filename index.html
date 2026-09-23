@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+
+<title>Грамотей 10+ — игра на грамотность</title>
+
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #182848, #4b6cb7);
+        color: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .game {
+        width: 100%;
+        max-width: 800px;
+        background: #ffffff;
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .start-screen { text-align: center; }
+
+    .logo {
+        font-size: 42px;
+        font-weight: 800;
+        color: #263d80;
+        margin-bottom: 8px;
+    }
+
+    .age {
+        display: inline-block;
+        background: #263d80;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .start-screen h1 { font-size: 32px; margin: 10px 0; }
+
+    .start-screen p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #666;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 30px 0;
+    }
+
+    .feature {
+        background: #f2f5fb;
+        border-radius: 15px;
+        padding: 15px;
+        font-weight: bold;
+    }
+
+    .best-score {
+        display: inline-block;
+        background: #fff4d6;
+        color: #8a6100;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .start-button, .restart-button {
+        border: none;
+        background: #263d80;
+        color: white;
+        padding: 16px 35px;
+        border-radius: 15px;
+        font-size: 19px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .start-button:hover, .restart-button:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+
+    .game-screen { display: none; }
+
+    .game-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .game-header .logo { font-size: 28px; margin: 0; }
+
+    .level {
+        background: #eef2ff;
+        color: #263d80;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        background: #f5f5f5;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .stat.timer { background: #e8f0ff; color: #263d80; }
+
+    .stat.timer.warning {
+        background: #ffe0e0;
+        color: #8c2020;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .progress-container {
+        width: 100%;
+        height: 10px;
+        background: #e5e5e5;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .progress {
+        width: 0%;
+        height: 100%;
+        background: #263d80;
+        transition: width 0.3s;
+    }
+
+    .question-type {
+        text-align: center;
+        color: #777;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .question {
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin: 20px 0 30px;
+    }
+
+    .question-text { max-width: 650px; margin: auto; }
+
+    .answers {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .answer {
+        border: 2px solid #e1e4ea;
+        background: white;
+        border-radius: 15px;
+        padding: 18px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        text-align: left;
+    }
+
+    .answer:hover {
+        background: #f1f4ff;
+        border-color: #263d80;
+        transform: translateY(-2px);
+    }
+
+    .answer.correct {
+        background: #d8f8e8;
+        border-color: #20a464;
+        color: #12643b;
+    }
+
+    .answer.wrong {
+        background: #ffe0e0;
+        border-color: #df4141;
+        color: #8c2020;
+    }
+
+    .answer:disabled { cursor: default; }
+
+    .message {
+        min-height: 30px;
+        text-align: center;
+        margin-top: 22px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .message.correct { color: #12643b; }
+    .message.wrong { color: #8c2020; }
+
+    .explanation {
+        display: none;
+        background: #f2f5fb;
+        border-left: 5px solid #263d80;
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-top: 18px;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        text-align: left;
+    }
+
+    .explanation strong { color: #263d80; }
+
+    .next-button {
+        display: none;
+        border: none;
+        background: #263d80;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px auto 0;
+    }
+
+    .result-screen { display: none; text-align: center; }
+    .result-screen h1 { font-size: 34px; }
+
+    .result-score {
+        font-size: 30px;
+        font-weight: bold;
+        margin: 25px 0;
+    }
+
+    .result-stars { font-size: 40px; margin: 20px 0; }
+
+    .result-message {
+        font-size: 19px;
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .result-best {
+        display: inline-block;
+        background: #fff4d6;
+        color: #8a6100;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    @media (max-width: 600px) {
+        body { padding: 10px; }
+        .game { padding: 20px; border-radius: 18px; }
+        .logo { font-size: 32px; }
+        .start-screen h1 { font-size: 25px; }
+        .features { grid-template-columns: 1fr; }
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .game-header { flex-direction: column; }
+        .question { font-size: 23px; }
+        .answers { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="start-screen" id="startScreen">
+        <div class="logo">📚 Грамотей</div>
+        <div class="age">10+</div>
+        <h1>Проверь свои знания русского языка</h1>
+        <p>Здесь недостаточно просто угадать букву. Нужно внимательно читать, думать и знать правила.</p>
+
+        <div class="features">
+            <div class="feature">Орфография</div>
+            <div class="feature">Пунктуация</div>
+            <div class="feature">Грамматика</div>
+            <div class="feature">Слова и значения</div>
+        </div>
+
+        <p>40 заданий • 4 уровня сложности • 30 секунд на ответ</p>
+
+        <div class="best-score" id="bestScoreStart" style="display:none;">
+            🏆 Лучший результат: <span id="bestScoreValueStart">0</span>
+        </div>
+
+        <br>
+        <button class="start-button" onclick="startGame()">Начать игру</button>
+    </div>
+
+    <div class="game-screen" id="gameScreen">
+
+        <div class="game-header">
+            <div class="logo">📚 Грамотей</div>
+            <div class="level" id="level">Уровень 1</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">Очки: <span id="score">0</span></div>
+            <div class="stat">Серия: <span id="streak">0</span></div>
+            <div class="stat">Задание: <span id="questionNumber">1</span>/40</div>
+            <div class="stat timer" id="timerBox">⏱ <span id="timer">30</span>с</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question-type" id="questionType">Орфография</div>
+
+        <div class="question">
+            <div class="question-text" id="question">Загрузка...</div>
+        </div>
+
+        <div class="answers" id="answers"></div>
+
+        <div class="message" id="message"></div>
+        <div class="explanation" id="explanation"></div>
+
+        <button class="next-button" id="nextButton" onclick="nextQuestion()">
+            Следующее задание →
+        </button>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+        <div class="logo">📚 Грамотей</div>
+        <h1>Испытание завершено!</h1>
+
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+
+        <div class="result-score">
+            <span id="finalScore">0</span> очков
+        </div>
+
+        <div class="result-message" id="resultMessage">Результат</div>
+
+        <div class="result-best" id="resultBest" style="display:none;">
+            🏆 Лучший результат: <span id="bestScoreValue">0</span>
+        </div>
+
+        <br>
+        <button class="restart-button" onclick="restartGame()">Играть снова</button>
+    </div>
+
+</div>
+
+
+<script>
+
+const questions = [
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["интересный", "интерестный", "интерессный", "интерестний"], correct: "интересный", explanation: "В слове «интересный» пишется -сн- (одна С), потому что оно образовано от «интерес» с суффиксом -н-." },
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["чувство", "чуство", "чувтсво", "чувствo"], correct: "чувство", explanation: "В слове «чувство» есть непроизносимая согласная В. Проверяем: «чувствовать», «сочувствие»." },
+    { level: 1, type: "Орфография", question: "Выбери правильное написание.", answers: ["растение", "ростение", "растинее", "росстение"], correct: "растение", explanation: "В корне -раст-/-ращ-/-рос- перед СТ и Щ пишется А: «растение», «выращивать». Но: «росла»." },
+    { level: 1, type: "Орфография", question: "Как правильно написать слово?", answers: ["праздник", "празник", "праздникк", "празтник"], correct: "праздник", explanation: "В слове «праздник» есть непроизносимая согласная Д. Проверяем: «праздный», «праздность»." },
+    { level: 1, type: "Словарный запас", question: "Что означает слово «смелый»?", answers: ["Храбрый", "Грустный", "Медленный", "Тихий"], correct: "Храбрый", explanation: "«Смелый» — не боящийся опасности. Синоним — «храбрый», «отважный»." },
+    { level: 1, type: "Синонимы", question: "Выбери синоним к слову «быстрый».", answers: ["Скорый", "Тяжёлый", "Слабый", "Высокий"], correct: "Скорый", explanation: "«Быстрый» и «скорый» — близкие по значению слова. Оба означают высокую скорость." },
+    { level: 1, type: "Антонимы", question: "Выбери антоним к слову «горячий».", answers: ["Холодный", "Яркий", "Большой", "Тёмный"], correct: "Холодный", explanation: "Антонимы — слова с противоположным значением. «Горячий» ↔ «холодный»." },
+    { level: 1, type: "Грамматика", question: "Какое слово является существительным?", answers: ["дерево", "бежать", "красивый", "быстро"], correct: "дерево", explanation: "Существительное отвечает на вопрос «кто? что?». «Дерево» — что? Это существительное." },
+    { level: 1, type: "Грамматика", question: "Какое слово является глаголом?", answers: ["читать", "книга", "интересный", "вчера"], correct: "читать", explanation: "Глагол отвечает на вопрос «что делать?». «Читать» — что делать? Это глагол." },
+    { level: 1, type: "Пунктуация", question: "Где нужна запятая?", answers: ["Когда стемнело, мы пошли домой.", "Когда, стемнело мы пошли домой.", "Когда стемнело мы, пошли домой.", "Когда стемнело мы пошли, домой."], correct: "Когда стемнело, мы пошли домой.", explanation: "Придаточное предложение «когда стемнело» отделяется запятой от главного." },
+
+    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["привилегия", "превилегия", "привиллигия", "привелегия"], correct: "привилегия", explanation: "«Привилегия» — словарное слово. Запомните: при-ви-ле-ги-я." },
+    { level: 2, type: "Орфография", question: "Выбери правильный вариант.", answers: ["рассказать", "расказать", "россказать", "рассказат"], correct: "рассказать", explanation: "Пишется с двумя С: приставка рас- + корень -сказ-. «Рассказать»." },
+    { level: 2, type: "Орфография", question: "Как правильно написать?", answers: ["искусство", "искуство", "искустство", "искуство"], correct: "искусство", explanation: "«Искусство» — словарное слово. Запомните: искусство." },
+    { level: 2, type: "Грамматика", question: "Какое слово является прилагательным?", answers: ["красивый", "красиво", "красота", "красоваться"], correct: "красивый", explanation: "Прилагательное отвечает на вопрос «какой?». «Красивый» — какой? Это прилагательное." },
+    { level: 2, type: "Грамматика", question: "Определи число слова «деревья».", answers: ["Множественное", "Единственное", "Двойственное", "Числа нет"], correct: "Множественное", explanation: "«Деревья» — множественное число. Единственное — «дерево»." },
+    { level: 2, type: "Антонимы", question: "Антоним к слову «широкий».", answers: ["Узкий", "Длинный", "Большой", "Высокий"], correct: "Узкий", explanation: "«Широкий» ↔ «узкий». Это пара антонимов." },
+    { level: 2, type: "Синонимы", question: "Синоним к слову «огромный».", answers: ["Гигантский", "Маленький", "Узкий", "Слабый"], correct: "Гигантский", explanation: "«Огромный» и «гигантский» — синонимы, оба означают очень большой размер." },
+    { level: 2, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я хотел пойти гулять, но начался дождь.", "Я хотел пойти гулять но, начался дождь.", "Я хотел, пойти гулять но начался дождь.", "Я хотел пойти, гулять но начался дождь."], correct: "Я хотел пойти гулять, но начался дождь.", explanation: "Перед союзом «но» между частями сложного предложения ставится запятая." },
+    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["участвовать", "учавствовать", "участвововать", "учавствувать"], correct: "участвовать", explanation: "«Участвовать» — словарное слово. Запомните: уча-ство-вать." },
+    { level: 2, type: "Грамматика", question: "В каком слове есть приставка?", answers: ["подземный", "лес", "стол", "окно"], correct: "подземный", explanation: "В слове «подземный» приставка под-. Корень -зем-." },
+
+    { level: 3, type: "Орфография", question: "Как правильно написать?", answers: ["претворить мечту", "притворить мечту", "претварить мечту", "притварить мечту"], correct: "претворить мечту", explanation: "«Претворить» (в жизнь) = осуществить. Приставка пре- в значении «пере-»." },
+    { level: 3, type: "Орфография", question: "Выбери правильный вариант.", answers: ["неожиданный", "не ожиданный", "неожиданый", "не ожиданый"], correct: "неожиданный", explanation: "«Неожиданный» пишется слитно и с двумя Н." },
+    { level: 3, type: "Грамматика", question: "Определи падеж слова: «к другу».", answers: ["Дательный", "Родительный", "Творительный", "Предложный"], correct: "Дательный", explanation: "«К другу» — к кому? Дательный падеж (к, по + дат. падеж)." },
+    { level: 3, type: "Грамматика", question: "В каком предложении есть подлежащее?", answers: ["Птицы улетели на юг.", "Очень холодно.", "Стемнело.", "Мне грустно."], correct: "Птицы улетели на юг.", explanation: "Подлежащее отвечает на вопрос «кто? что?». Здесь подлежащее — «птицы»." },
+    { level: 3, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Если будет тепло, мы поедем за город.", "Если будет тепло мы, поедем за город.", "Если, будет тепло мы поедем за город.", "Если будет, тепло мы поедем за город."], correct: "Если будет тепло, мы поедем за город.", explanation: "Придаточное предложение «если будет тепло» отделяется запятой от главного." },
+    { level: 3, type: "Словарный запас", question: "Что означает слово «благородство»?", answers: ["Высокие моральные качества", "Сильный страх", "Быстрая реакция", "Умение спорить"], correct: "Высокие моральные качества", explanation: "«Благородство» — честность, достоинство, великодушие." },
+    { level: 3, type: "Орфография", question: "Как правильно?", answers: ["рассвет", "расвет", "россвет", "рассветт"], correct: "рассвет", explanation: "«Рассвет» пишется с двумя С: приставка рас- + корень -свет-." },
+    { level: 3, type: "Грамматика", question: "Какое слово является наречием?", answers: ["быстро", "быстрый", "быстрота", "ускорить"], correct: "быстро", explanation: "Наречие отвечает на вопрос «как?». «Быстро» — как? Это наречие." },
+    { level: 3, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Солнце скрылось за тучами, и начался дождь.", "Солнце скрылось за тучами и, начался дождь.", "Солнце скрылось, за тучами и начался дождь.", "Солнце скрылось за тучами и начался, дождь."], correct: "Солнце скрылось за тучами, и начался дождь.", explanation: "Перед союзом «и» между частями сложносочинённого предложения ставится запятая." },
+    { level: 3, type: "Синонимы", question: "Какое слово ближе всего по значению к слову «настойчивый»?", answers: ["Упорный", "Рассеянный", "Ленивый", "Испуганный"], correct: "Упорный", explanation: "«Настойчивый» и «упорный» — синонимы." },
+
+    { level: 4, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я знал, что ты придёшь, поэтому приготовил ужин.", "Я знал что, ты придёшь поэтому приготовил ужин.", "Я знал, что ты придёшь поэтому, приготовил ужин.", "Я знал что ты придёшь, поэтому приготовил ужин."], correct: "Я знал, что ты придёшь, поэтому приготовил ужин.", explanation: "Запятая перед «что» и перед «поэтому» — две запятые в сложноподчинённом предложении." },
+    { level: 4, type: "Орфография", question: "Как правильно?", answers: ["присутствовать", "пресутствовать", "присудствовать", "присутствовоть"], correct: "присутствовать", explanation: "«Присутствовать» — словарное слово. Запомните: при-сут-ство-вать." },
+    { level: 4, type: "Грамматика", question: "Определи падеж слова «красивым».", answers: ["Творительный", "Именительный", "Родительный", "Дательный"], correct: "Творительный", explanation: "«Красивым» — кем? чем? Творительный падеж." },
+    { level: 4, type: "Орфография", question: "Выбери правильное написание.", answers: ["бесшумный", "безшумный", "бесшумний", "безшумний"], correct: "бесшумный", explanation: "Перед глухой Ш пишется приставка бес-. Правило: без-/бес- перед глухими согласными." },
+    { level: 4, type: "Грамматика", question: "В каком предложении есть однородные члены?", answers: ["На столе лежали яблоки, груши и сливы.", "Мальчик читает книгу.", "Наступил вечер.", "Птицы улетели."], correct: "На столе лежали яблоки, груши и сливы.", explanation: "Однородные члены — «яблоки, груши, сливы»." },
+    { level: 4, type: "Словарный запас", question: "Что означает слово «компромисс»?", answers: ["Взаимная уступка ради решения спора", "Победа в соревновании", "Сильное удивление", "Отказ от общения"], correct: "Взаимная уступка ради решения спора", explanation: "«Компромисс» — соглашение на основе взаимных уступок." },
+    { level: 4, type: "Орфография", question: "Как правильно написать?", answers: ["преувеличивать", "приувеличивать", "преувиличивать", "приувиличивать"], correct: "преувеличивать", explanation: "Приставка пре- в значении «очень». «Преувеличивать» = очень увеличивать." },
+    { level: 4, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Когда закончился дождь, который шёл всю ночь, выглянуло солнце.", "Когда закончился дождь который, шёл всю ночь выглянуло солнце.", "Когда закончился, дождь который шёл всю ночь выглянуло солнце.", "Когда закончился дождь, который шёл всю ночь выглянуло солнце."], correct: "Когда закончился дождь, который шёл всю ночь, выглянуло солнце.", explanation: "Придаточное «который шёл всю ночь» выделяется запятыми с двух сторон." },
+    { level: 4, type: "Грамматика", question: "Какое слово является причастием?", answers: ["прочитанный", "прочитать", "прочитав", "чтение"], correct: "прочитанный", explanation: "Причастие отвечает на вопрос «какой?». «Прочитанный» — какой? Это причастие." },
+    { level: 4, type: "Внимательность", question: "Найди предложение без ошибки.", answers: ["Мы договорились встретиться после уроков.", "Мы договорились встретится после уроков.", "Мы договорились встретиться после урокав.", "Мы договорилис встретиться после уроков."], correct: "Мы договорились встретиться после уроков.", explanation: "«Встретиться» — что сделать? Возвратный глагол пишется с -ться." }
+];
+
+
+const TIME_PER_QUESTION = 30;
+
+let currentQuestion = 0;
+let score = 0;
+let streak = 0;
+let answered = false;
+let timeLeft = TIME_PER_QUESTION;
+let timerInterval = null;
+let gameQuestions = [...questions];
+let bestScore = 0;
+
+try {
+    bestScore = parseInt(localStorage.getItem("gramotey_best") || "0", 10);
+} catch (e) { bestScore = 0; }
+
+
+function startGame() {
+    currentQuestion = 0;
+    score = 0;
+    streak = 0;
+    answered = false;
+
+    gameQuestions = [...questions];
+    for (let i = gameQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [gameQuestions[i], gameQuestions[j]] = [gameQuestions[j], gameQuestions[i]];
+    }
+
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("resultScreen").style.display = "none";
+    document.getElementById("gameScreen").style.display = "block";
+
+    updateStats();
+    showQuestion();
+}
+
+
+function startTimer() {
+    stopTimer();
+    timeLeft = TIME_PER_QUESTION;
+    updateTimerDisplay();
+
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            stopTimer();
+            timeOut();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function updateTimerDisplay() {
+    const timerEl = document.getElementById("timer");
+    const timerBox = document.getElementById("timerBox");
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 10) {
+        timerBox.classList.add("warning");
+    } else {
+        timerBox.classList.remove("warning");
+    }
+}
+
+
+function showQuestion() {
+    answered = false;
+
+    const q = gameQuestions[currentQuestion];
+
+    document.getElementById("level").textContent = "Уровень " + q.level + " — " + q.type;
+    document.getElementById("questionNumber").textContent = (currentQuestion + 1);
+    document.getElementById("question").textContent = q.question;
+    document.getElementById("questionType").textContent = q.type;
+
+    const answersContainer = document.getElementById("answers");
+    answersContainer.innerHTML = "";
+
+    document.getElementById("message").textContent = "";
+    document.getElementById("message").className = "message";
+
+    const explEl = document.getElementById("explanation");
+    explEl.style.display = "none";
+    explEl.innerHTML = "";
+
+    document.getElementById("nextButton").style.display = "none";
+
+    const shuffledAnswers = [...q.answers];
+    for (let i = shuffledAnswers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledAnswers[i], shuffledAnswers[j]] = [shuffledAnswers[j], shuffledAnswers[i]];
+    }
+
+    shuffledAnswers.forEach(function(option) {
+        const btn = document.createElement("button");
+        btn.className = "answer";
+        btn.textContent = option;
+        btn.onclick = function() { checkAnswer(option, btn); };
+        answersContainer.appendChild(btn);
+    });
+
+    const progress = (currentQuestion / gameQuestions.length) * 100;
+    document.getElementById("progress").style.width = progress + "%";
+
+    startTimer();
+}
+
+
+function checkAnswer(answer, button) {
+    if (answered) return;
+    answered = true;
+    stopTimer();
+
+    const q = gameQuestions[currentQuestion];
+    const buttons = document.querySelectorAll(".answer");
+    buttons.forEach(function(btn) { btn.disabled = true; });
+
+    if (answer === q.correct) {
+        button.classList.add("correct");
+        streak++;
+        score += 10;
+        if (timeLeft >= 20) score += 5;
+        if (streak >= 3) score += 5;
+
+        const msgEl = document.getElementById("message");
+        msgEl.textContent = "Правильно! Отличная работа.";
+        msgEl.className = "message correct";
+    } else {
+        button.classList.add("wrong");
+        streak = 0;
+        buttons.forEach(function(btn) {
+            if (btn.textContent === q.correct) btn.classList.add("correct");
+        });
+
+        const msgEl = document.getElementById("message");
+        msgEl.textContent = "Неверно. Правильный ответ: " + q.correct;
+        msgEl.className = "message wrong";
+    }
+
+    showExplanation(q.explanation);
+    updateStats();
+    document.getElementById("nextButton").style.display = "block";
+}
+
+
+function timeOut() {
+    if (answered) return;
+    answered = true;
+
+    const q = gameQuestions[currentQuestion];
+    const buttons = document.querySelectorAll(".answer");
+    buttons.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.textContent === q.correct) btn.classList.add("correct");
+    });
+
+    streak = 0;
+
+    const msgEl = document.getElementById("message");
+    msgEl.textContent = "Время вышло! Правильный ответ: " + q.correct;
+    msgEl.className = "message wrong";
+
+    showExplanation(q.explanation);
+    updateStats();
+    document.getElementById("nextButton").style.display = "block";
+}
+
+
+function showExplanation(text) {
+    if (!text) return;
+    const explEl = document.getElementById("explanation");
+    explEl.innerHTML = "<strong>📘 Правило:</strong> " + text;
+    explEl.style.display = "block";
+}
+
+
+function nextQuestion() {
+    stopTimer();
+    currentQuestion++;
+
+    if (currentQuestion >= gameQuestions.length) {
+        document.getElementById("progress").style.width = "100%";
+        finishGame();
+    } else {
+        showQuestion();
+    }
+}
+
+
+function updateStats() {
+    document.getElementById("score").textContent = score;
+    document.getElementById("streak").textContent = streak;
+}
+
+
+function finishGame() {
+    stopTimer();
+
+    document.getElementById("gameScreen").style.display = "none";
+    document.getElementById("resultScreen").style.display = "block";
+
+    document.getElementById("finalScore").textContent = score;
+
+    let stars = "";
+    let message = "";
+
+    if (score >= 450) {
+        stars = "⭐⭐⭐⭐⭐";
+        message = "Выдающийся результат! Русский язык тебе действительно хорошо знаком.";
+    } else if (score >= 370) {
+        stars = "⭐⭐⭐⭐";
+        message = "Отличный результат. Ты уверенно справляешься со сложными заданиями.";
+    } else if (score >= 270) {
+        stars = "⭐⭐⭐";
+        message = "Хороший результат. Есть знания, но некоторые правила стоит повторить.";
+    } else if (score >= 150) {
+        stars = "⭐⭐";
+        message = "Неплохое начало. Повтори основные правила и попробуй снова.";
+    } else {
+        stars = "⭐";
+        message = "Попробуй ещё раз. Внимательность и практика помогут улучшить результат.";
+    }
+
+    document.getElementById("resultStars").textContent = stars;
+    document.getElementById("resultMessage").textContent = message;
+
+    if (score > bestScore) {
+        bestScore = score;
+        try { localStorage.setItem("gramotey_best", bestScore); } catch (e) {}
+    }
+
+    const bestEl = document.getElementById("resultBest");
+    if (bestScore > 0) {
+        document.getElementById("bestScoreValue").textContent = bestScore;
+        bestEl.style.display = "inline-block";
+    } else {
+        bestEl.style.display = "none";
+    }
+
+    updateBestScoreOnStart();
+}
+
+
+function updateBestScoreOnStart() {
+    const block = document.getElementById("bestScoreStart");
+    const value = document.getElementById("bestScoreValueStart");
+
+    if (bestScore > 0) {
+        value.textContent = bestScore;
+        block.style.display = "inline-block";
+    } else {
+        block.style.display = "none";
+    }
+}
+
+
+function restartGame() { startGame(); }
+
+updateBestScoreOnStart();
+
+</script>
+
+</body>
+</html>
