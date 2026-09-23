@@ -10,283 +10,109 @@
 
 <style>
     * { box-sizing: border-box; }
-
     body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, sans-serif;
+        margin: 0; min-height: 100vh; font-family: Arial, sans-serif;
         background: linear-gradient(135deg, #182848, #4b6cb7);
-        color: #222;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
+        color: #222; display: flex; justify-content: center;
+        align-items: center; padding: 20px;
     }
-
     .game {
-        width: 100%;
-        max-width: 800px;
-        background: #ffffff;
-        border-radius: 25px;
-        padding: 30px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        width: 100%; max-width: 800px; background: #fff;
+        border-radius: 25px; padding: 30px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-
     .start-screen { text-align: center; }
-
-    .logo {
-        font-size: 42px;
-        font-weight: 800;
-        color: #263d80;
-        margin-bottom: 8px;
-    }
-
+    .logo { font-size: 42px; font-weight: 800; color: #263d80; margin-bottom: 8px; }
     .age {
-        display: inline-block;
-        background: #263d80;
-        color: white;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 25px;
+        display: inline-block; background: #263d80; color: white;
+        padding: 6px 14px; border-radius: 20px; font-size: 14px;
+        font-weight: bold; margin-bottom: 25px;
     }
-
     .start-screen h1 { font-size: 32px; margin: 10px 0; }
-
-    .start-screen p {
-        font-size: 18px;
-        line-height: 1.6;
-        color: #666;
-    }
-
+    .start-screen p { font-size: 18px; line-height: 1.6; color: #666; }
     .features {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin: 30px 0;
+        display: grid; grid-template-columns: repeat(2, 1fr);
+        gap: 12px; margin: 30px 0;
     }
-
-    .feature {
-        background: #f2f5fb;
-        border-radius: 15px;
-        padding: 15px;
-        font-weight: bold;
-    }
-
+    .feature { background: #f2f5fb; border-radius: 15px; padding: 15px; font-weight: bold; }
     .best-score {
-        display: inline-block;
-        background: #fff4d6;
-        color: #8a6100;
-        padding: 10px 18px;
-        border-radius: 12px;
-        font-weight: bold;
-        margin-bottom: 20px;
+        display: inline-block; background: #fff4d6; color: #8a6100;
+        padding: 10px 18px; border-radius: 12px; font-weight: bold; margin-bottom: 20px;
     }
-
     .start-button, .restart-button {
-        border: none;
-        background: #263d80;
-        color: white;
-        padding: 16px 35px;
-        border-radius: 15px;
-        font-size: 19px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
+        border: none; background: #263d80; color: white;
+        padding: 16px 35px; border-radius: 15px; font-size: 19px;
+        font-weight: bold; cursor: pointer; transition: 0.2s;
     }
-
-    .start-button:hover, .restart-button:hover {
-        transform: translateY(-2px);
-        opacity: 0.9;
-    }
-
+    .start-button:hover, .restart-button:hover { transform: translateY(-2px); opacity: 0.9; }
     .game-screen { display: none; }
-
     .game-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
+        display: flex; justify-content: space-between;
+        align-items: center; gap: 15px; margin-bottom: 20px;
     }
-
     .game-header .logo { font-size: 28px; margin: 0; }
-
     .level {
-        background: #eef2ff;
-        color: #263d80;
-        padding: 8px 14px;
-        border-radius: 10px;
-        font-weight: bold;
+        background: #eef2ff; color: #263d80; padding: 8px 14px;
+        border-radius: 10px; font-weight: bold;
     }
-
     .stats {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 12px; margin-bottom: 20px;
     }
-
     .stat {
-        background: #f5f5f5;
-        border-radius: 12px;
-        padding: 12px;
-        text-align: center;
-        font-weight: bold;
+        background: #f5f5f5; border-radius: 12px; padding: 12px;
+        text-align: center; font-weight: bold;
     }
-
     .stat.timer { background: #e8f0ff; color: #263d80; }
-
-    .stat.timer.warning {
-        background: #ffe0e0;
-        color: #8c2020;
-        animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
+    .stat.timer.warning { background: #ffe0e0; color: #8c2020; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
     .progress-container {
-        width: 100%;
-        height: 10px;
-        background: #e5e5e5;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 25px;
+        width: 100%; height: 10px; background: #e5e5e5;
+        border-radius: 10px; overflow: hidden; margin-bottom: 25px;
     }
-
-    .progress {
-        width: 0%;
-        height: 100%;
-        background: #263d80;
-        transition: width 0.3s;
-    }
-
-    .question-type {
-        text-align: center;
-        color: #777;
-        font-size: 15px;
-        margin-bottom: 10px;
-    }
-
+    .progress { width: 0%; height: 100%; background: #263d80; transition: width 0.3s; }
+    .question-type { text-align: center; color: #777; font-size: 15px; margin-bottom: 10px; }
     .question {
-        text-align: center;
-        font-size: 30px;
-        font-weight: bold;
-        line-height: 1.4;
-        margin: 20px 0 30px;
+        text-align: center; font-size: 30px; font-weight: bold;
+        line-height: 1.4; margin: 20px 0 30px;
     }
-
     .question-text { max-width: 650px; margin: auto; }
-
-    .answers {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
+    .answers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
     .answer {
-        border: 2px solid #e1e4ea;
-        background: white;
-        border-radius: 15px;
-        padding: 18px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-        text-align: left;
+        border: 2px solid #e1e4ea; background: white; border-radius: 15px;
+        padding: 18px; font-size: 18px; font-weight: bold;
+        cursor: pointer; transition: 0.2s; text-align: left;
     }
-
-    .answer:hover {
-        background: #f1f4ff;
-        border-color: #263d80;
-        transform: translateY(-2px);
-    }
-
-    .answer.correct {
-        background: #d8f8e8;
-        border-color: #20a464;
-        color: #12643b;
-    }
-
-    .answer.wrong {
-        background: #ffe0e0;
-        border-color: #df4141;
-        color: #8c2020;
-    }
-
+    .answer:hover { background: #f1f4ff; border-color: #263d80; transform: translateY(-2px); }
+    .answer.correct { background: #d8f8e8; border-color: #20a464; color: #12643b; }
+    .answer.wrong { background: #ffe0e0; border-color: #df4141; color: #8c2020; }
     .answer:disabled { cursor: default; }
-
     .message {
-        min-height: 30px;
-        text-align: center;
-        margin-top: 22px;
-        font-size: 18px;
-        font-weight: bold;
+        min-height: 30px; text-align: center; margin-top: 22px;
+        font-size: 18px; font-weight: bold;
     }
-
     .message.correct { color: #12643b; }
     .message.wrong { color: #8c2020; }
-
     .explanation {
-        display: none;
-        background: #f2f5fb;
-        border-left: 5px solid #263d80;
-        border-radius: 12px;
-        padding: 15px 18px;
-        margin-top: 18px;
-        font-size: 16px;
-        line-height: 1.6;
-        color: #333;
-        text-align: left;
+        display: none; background: #f2f5fb; border-left: 5px solid #263d80;
+        border-radius: 12px; padding: 15px 18px; margin-top: 18px;
+        font-size: 16px; line-height: 1.6; color: #333; text-align: left;
     }
-
     .explanation strong { color: #263d80; }
-
     .next-button {
-        display: none;
-        border: none;
-        background: #263d80;
-        color: white;
-        padding: 14px 28px;
-        border-radius: 12px;
-        font-size: 17px;
-        font-weight: bold;
-        cursor: pointer;
-        margin: 20px auto 0;
+        display: none; border: none; background: #263d80; color: white;
+        padding: 14px 28px; border-radius: 12px; font-size: 17px;
+        font-weight: bold; cursor: pointer; margin: 20px auto 0;
     }
-
     .result-screen { display: none; text-align: center; }
     .result-screen h1 { font-size: 34px; }
-
-    .result-score {
-        font-size: 30px;
-        font-weight: bold;
-        margin: 25px 0;
-    }
-
+    .result-score { font-size: 30px; font-weight: bold; margin: 25px 0; }
     .result-stars { font-size: 40px; margin: 20px 0; }
-
-    .result-message {
-        font-size: 19px;
-        color: #666;
-        line-height: 1.5;
-        margin-bottom: 15px;
-    }
-
+    .result-message { font-size: 19px; color: #666; line-height: 1.5; margin-bottom: 15px; }
     .result-best {
-        display: inline-block;
-        background: #fff4d6;
-        color: #8a6100;
-        padding: 10px 18px;
-        border-radius: 12px;
-        font-weight: bold;
-        margin-bottom: 25px;
+        display: inline-block; background: #fff4d6; color: #8a6100;
+        padding: 10px 18px; border-radius: 12px; font-weight: bold; margin-bottom: 25px;
     }
-
     @media (max-width: 600px) {
         body { padding: 10px; }
         .game { padding: 20px; border-radius: 18px; }
@@ -300,7 +126,6 @@
     }
 </style>
 </head>
-
 <body>
 
 <div class="game">
@@ -318,7 +143,7 @@
             <div class="feature">Слова и значения</div>
         </div>
 
-        <p>40 заданий • 4 уровня сложности • 30 секунд на ответ</p>
+        <p>20 случайных заданий из 80 • 30 секунд на ответ</p>
 
         <div class="best-score" id="bestScoreStart" style="display:none;">
             🏆 Лучший результат: <span id="bestScoreValueStart">0</span>
@@ -329,7 +154,6 @@
     </div>
 
     <div class="game-screen" id="gameScreen">
-
         <div class="game-header">
             <div class="logo">📚 Грамотей</div>
             <div class="level" id="level">Уровень 1</div>
@@ -338,7 +162,7 @@
         <div class="stats">
             <div class="stat">Очки: <span id="score">0</span></div>
             <div class="stat">Серия: <span id="streak">0</span></div>
-            <div class="stat">Задание: <span id="questionNumber">1</span>/40</div>
+            <div class="stat">Задание: <span id="questionNumber">1</span>/20</div>
             <div class="stat timer" id="timerBox">⏱ <span id="timer">30</span>с</div>
         </div>
 
@@ -347,13 +171,11 @@
         </div>
 
         <div class="question-type" id="questionType">Орфография</div>
-
         <div class="question">
             <div class="question-text" id="question">Загрузка...</div>
         </div>
 
         <div class="answers" id="answers"></div>
-
         <div class="message" id="message"></div>
         <div class="explanation" id="explanation"></div>
 
@@ -365,19 +187,12 @@
     <div class="result-screen" id="resultScreen">
         <div class="logo">📚 Грамотей</div>
         <h1>Испытание завершено!</h1>
-
         <div class="result-stars" id="resultStars">⭐⭐⭐</div>
-
-        <div class="result-score">
-            <span id="finalScore">0</span> очков
-        </div>
-
+        <div class="result-score"><span id="finalScore">0</span> очков</div>
         <div class="result-message" id="resultMessage">Результат</div>
-
         <div class="result-best" id="resultBest" style="display:none;">
             🏆 Лучший результат: <span id="bestScoreValue">0</span>
         </div>
-
         <br>
         <button class="restart-button" onclick="restartGame()">Играть снова</button>
     </div>
@@ -387,54 +202,121 @@
 
 <script>
 
+/* ============================================================
+   БАЗА ЗАДАНИЙ — 80 штук
+   ============================================================ */
+
 const questions = [
-    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["интересный", "интерестный", "интерессный", "интерестний"], correct: "интересный", explanation: "В слове «интересный» пишется -сн- (одна С), потому что оно образовано от «интерес» с суффиксом -н-." },
-    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["чувство", "чуство", "чувтсво", "чувствo"], correct: "чувство", explanation: "В слове «чувство» есть непроизносимая согласная В. Проверяем: «чувствовать», «сочувствие»." },
-    { level: 1, type: "Орфография", question: "Выбери правильное написание.", answers: ["растение", "ростение", "растинее", "росстение"], correct: "растение", explanation: "В корне -раст-/-ращ-/-рос- перед СТ и Щ пишется А: «растение», «выращивать». Но: «росла»." },
-    { level: 1, type: "Орфография", question: "Как правильно написать слово?", answers: ["праздник", "празник", "праздникк", "празтник"], correct: "праздник", explanation: "В слове «праздник» есть непроизносимая согласная Д. Проверяем: «праздный», «праздность»." },
-    { level: 1, type: "Словарный запас", question: "Что означает слово «смелый»?", answers: ["Храбрый", "Грустный", "Медленный", "Тихий"], correct: "Храбрый", explanation: "«Смелый» — не боящийся опасности. Синоним — «храбрый», «отважный»." },
-    { level: 1, type: "Синонимы", question: "Выбери синоним к слову «быстрый».", answers: ["Скорый", "Тяжёлый", "Слабый", "Высокий"], correct: "Скорый", explanation: "«Быстрый» и «скорый» — близкие по значению слова. Оба означают высокую скорость." },
-    { level: 1, type: "Антонимы", question: "Выбери антоним к слову «горячий».", answers: ["Холодный", "Яркий", "Большой", "Тёмный"], correct: "Холодный", explanation: "Антонимы — слова с противоположным значением. «Горячий» ↔ «холодный»." },
-    { level: 1, type: "Грамматика", question: "Какое слово является существительным?", answers: ["дерево", "бежать", "красивый", "быстро"], correct: "дерево", explanation: "Существительное отвечает на вопрос «кто? что?». «Дерево» — что? Это существительное." },
-    { level: 1, type: "Грамматика", question: "Какое слово является глаголом?", answers: ["читать", "книга", "интересный", "вчера"], correct: "читать", explanation: "Глагол отвечает на вопрос «что делать?». «Читать» — что делать? Это глагол." },
-    { level: 1, type: "Пунктуация", question: "Где нужна запятая?", answers: ["Когда стемнело, мы пошли домой.", "Когда, стемнело мы пошли домой.", "Когда стемнело мы, пошли домой.", "Когда стемнело мы пошли, домой."], correct: "Когда стемнело, мы пошли домой.", explanation: "Придаточное предложение «когда стемнело» отделяется запятой от главного." },
 
-    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["привилегия", "превилегия", "привиллигия", "привелегия"], correct: "привилегия", explanation: "«Привилегия» — словарное слово. Запомните: при-ви-ле-ги-я." },
-    { level: 2, type: "Орфография", question: "Выбери правильный вариант.", answers: ["рассказать", "расказать", "россказать", "рассказат"], correct: "рассказать", explanation: "Пишется с двумя С: приставка рас- + корень -сказ-. «Рассказать»." },
-    { level: 2, type: "Орфография", question: "Как правильно написать?", answers: ["искусство", "искуство", "искустство", "искуство"], correct: "искусство", explanation: "«Искусство» — словарное слово. Запомните: искусство." },
-    { level: 2, type: "Грамматика", question: "Какое слово является прилагательным?", answers: ["красивый", "красиво", "красота", "красоваться"], correct: "красивый", explanation: "Прилагательное отвечает на вопрос «какой?». «Красивый» — какой? Это прилагательное." },
-    { level: 2, type: "Грамматика", question: "Определи число слова «деревья».", answers: ["Множественное", "Единственное", "Двойственное", "Числа нет"], correct: "Множественное", explanation: "«Деревья» — множественное число. Единственное — «дерево»." },
-    { level: 2, type: "Антонимы", question: "Антоним к слову «широкий».", answers: ["Узкий", "Длинный", "Большой", "Высокий"], correct: "Узкий", explanation: "«Широкий» ↔ «узкий». Это пара антонимов." },
-    { level: 2, type: "Синонимы", question: "Синоним к слову «огромный».", answers: ["Гигантский", "Маленький", "Узкий", "Слабый"], correct: "Гигантский", explanation: "«Огромный» и «гигантский» — синонимы, оба означают очень большой размер." },
-    { level: 2, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я хотел пойти гулять, но начался дождь.", "Я хотел пойти гулять но, начался дождь.", "Я хотел, пойти гулять но начался дождь.", "Я хотел пойти, гулять но начался дождь."], correct: "Я хотел пойти гулять, но начался дождь.", explanation: "Перед союзом «но» между частями сложного предложения ставится запятая." },
-    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["участвовать", "учавствовать", "участвововать", "учавствувать"], correct: "участвовать", explanation: "«Участвовать» — словарное слово. Запомните: уча-ство-вать." },
-    { level: 2, type: "Грамматика", question: "В каком слове есть приставка?", answers: ["подземный", "лес", "стол", "окно"], correct: "подземный", explanation: "В слове «подземный» приставка под-. Корень -зем-." },
+    /* ---------- УРОВЕНЬ 1 ---------- */
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["интересный","интерестный","интерессный","интерестний"], correct: "интересный", explanation: "В слове «интересный» пишется -сн- (одна С), потому что оно образовано от «интерес» с суффиксом -н-." },
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["чувство","чуство","чувтсво","чувствo"], correct: "чувство", explanation: "В слове «чувство» есть непроизносимая согласная В. Проверяем: «чувствовать», «сочувствие»." },
+    { level: 1, type: "Орфография", question: "Выбери правильное написание.", answers: ["растение","ростение","растинее","росстение"], correct: "растение", explanation: "В корне -раст-/-ращ-/-рос- перед СТ и Щ пишется А: «растение», «выращивать». Но: «росла»." },
+    { level: 1, type: "Орфография", question: "Как правильно написать слово?", answers: ["праздник","празник","праздникк","празтник"], correct: "праздник", explanation: "В слове «праздник» есть непроизносимая согласная Д. Проверяем: «праздный»." },
+    { level: 1, type: "Словарный запас", question: "Что означает слово «смелый»?", answers: ["Храбрый","Грустный","Медленный","Тихий"], correct: "Храбрый", explanation: "«Смелый» — не боящийся опасности. Синоним — «храбрый»." },
+    { level: 1, type: "Синонимы", question: "Выбери синоним к слову «быстрый».", answers: ["Скорый","Тяжёлый","Слабый","Высокий"], correct: "Скорый", explanation: "«Быстрый» и «скорый» — близкие по значению слова." },
+    { level: 1, type: "Антонимы", question: "Выбери антоним к слову «горячий».", answers: ["Холодный","Яркий","Большой","Тёмный"], correct: "Холодный", explanation: "Антонимы — противоположные по значению: «горячий» ↔ «холодный»." },
+    { level: 1, type: "Грамматика", question: "Какое слово является существительным?", answers: ["дерево","бежать","красивый","быстро"], correct: "дерево", explanation: "Существительное отвечает на вопрос «кто? что?». «Дерево» — что?" },
+    { level: 1, type: "Грамматика", question: "Какое слово является глаголом?", answers: ["читать","книга","интересный","вчера"], correct: "читать", explanation: "Глагол отвечает на вопрос «что делать?». «Читать» — что делать?" },
+    { level: 1, type: "Пунктуация", question: "Где нужна запятая?", answers: ["Когда стемнело, мы пошли домой.","Когда, стемнело мы пошли домой.","Когда стемнело мы, пошли домой.","Когда стемнело мы пошли, домой."], correct: "Когда стемнело, мы пошли домой.", explanation: "Придаточное предложение «когда стемнело» отделяется запятой." },
 
-    { level: 3, type: "Орфография", question: "Как правильно написать?", answers: ["претворить мечту", "притворить мечту", "претварить мечту", "притварить мечту"], correct: "претворить мечту", explanation: "«Претворить» (в жизнь) = осуществить. Приставка пре- в значении «пере-»." },
-    { level: 3, type: "Орфография", question: "Выбери правильный вариант.", answers: ["неожиданный", "не ожиданный", "неожиданый", "не ожиданый"], correct: "неожиданный", explanation: "«Неожиданный» пишется слитно и с двумя Н." },
-    { level: 3, type: "Грамматика", question: "Определи падеж слова: «к другу».", answers: ["Дательный", "Родительный", "Творительный", "Предложный"], correct: "Дательный", explanation: "«К другу» — к кому? Дательный падеж (к, по + дат. падеж)." },
-    { level: 3, type: "Грамматика", question: "В каком предложении есть подлежащее?", answers: ["Птицы улетели на юг.", "Очень холодно.", "Стемнело.", "Мне грустно."], correct: "Птицы улетели на юг.", explanation: "Подлежащее отвечает на вопрос «кто? что?». Здесь подлежащее — «птицы»." },
-    { level: 3, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Если будет тепло, мы поедем за город.", "Если будет тепло мы, поедем за город.", "Если, будет тепло мы поедем за город.", "Если будет, тепло мы поедем за город."], correct: "Если будет тепло, мы поедем за город.", explanation: "Придаточное предложение «если будет тепло» отделяется запятой от главного." },
-    { level: 3, type: "Словарный запас", question: "Что означает слово «благородство»?", answers: ["Высокие моральные качества", "Сильный страх", "Быстрая реакция", "Умение спорить"], correct: "Высокие моральные качества", explanation: "«Благородство» — честность, достоинство, великодушие." },
-    { level: 3, type: "Орфография", question: "Как правильно?", answers: ["рассвет", "расвет", "россвет", "рассветт"], correct: "рассвет", explanation: "«Рассвет» пишется с двумя С: приставка рас- + корень -свет-." },
-    { level: 3, type: "Грамматика", question: "Какое слово является наречием?", answers: ["быстро", "быстрый", "быстрота", "ускорить"], correct: "быстро", explanation: "Наречие отвечает на вопрос «как?». «Быстро» — как? Это наречие." },
-    { level: 3, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Солнце скрылось за тучами, и начался дождь.", "Солнце скрылось за тучами и, начался дождь.", "Солнце скрылось, за тучами и начался дождь.", "Солнце скрылось за тучами и начался, дождь."], correct: "Солнце скрылось за тучами, и начался дождь.", explanation: "Перед союзом «и» между частями сложносочинённого предложения ставится запятая." },
-    { level: 3, type: "Синонимы", question: "Какое слово ближе всего по значению к слову «настойчивый»?", answers: ["Упорный", "Рассеянный", "Ленивый", "Испуганный"], correct: "Упорный", explanation: "«Настойчивый» и «упорный» — синонимы." },
+    { level: 1, type: "Орфография", question: "Выбери правильное написание.", answers: ["жизнь","жызнь","жизьнь","жизн"], correct: "жизнь", explanation: "ЖИ и ШИ пишутся с буквой И: «жизнь», «машина»." },
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["чаща","чащя","чяща","чящя"], correct: "чаща", explanation: "ЧА и ЩА пишутся с буквой А: «чаща», «пища»." },
+    { level: 1, type: "Орфография", question: "Как правильно?", answers: ["чугун","чюгун","чюгунь","чугунь"], correct: "чугун", explanation: "ЧУ и ЩУ пишутся с буквой У: «чугун», «щука»." },
+    { level: 1, type: "Грамматика", question: "Какого рода слово «конь»?", answers: ["Мужской","Женский","Средний","Рода нет"], correct: "Мужской", explanation: "«Конь» — он мой, значит мужской род." },
+    { level: 1, type: "Словарный запас", question: "Что означает слово «храбрый»?", answers: ["Смелый","Ленивый","Тихий","Голодный"], correct: "Смелый", explanation: "«Храбрый» = «смелый», «отважный»." },
+    { level: 1, type: "Синонимы", question: "Синоним к слову «радостный».", answers: ["Весёлый","Грустный","Злой","Усталый"], correct: "Весёлый", explanation: "«Радостный» и «весёлый» — близкие по значению." },
+    { level: 1, type: "Антонимы", question: "Антоним к слову «день».", answers: ["Ночь","Утро","Вечер","Полдень"], correct: "Ночь", explanation: "«День» ↔ «ночь» — противоположные по значению." },
+    { level: 1, type: "Грамматика", question: "Какое слово является существительным?", answers: ["кот","прыгать","весёлый","громко"], correct: "кот", explanation: "Существительное — «кот» (кто?)." },
+    { level: 1, type: "Грамматика", question: "Какое слово является глаголом?", answers: ["прыгать","стол","высокий","вечер"], correct: "прыгать", explanation: "Глагол — «прыгать» (что делать?)." },
+    { level: 1, type: "Орфография", question: "Как пишется название города?", answers: ["Москва","москва","МАСКВА","москва́"], correct: "Москва", explanation: "Названия городов пишутся с большой буквы." },
 
-    { level: 4, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я знал, что ты придёшь, поэтому приготовил ужин.", "Я знал что, ты придёшь поэтому приготовил ужин.", "Я знал, что ты придёшь поэтому, приготовил ужин.", "Я знал что ты придёшь, поэтому приготовил ужин."], correct: "Я знал, что ты придёшь, поэтому приготовил ужин.", explanation: "Запятая перед «что» и перед «поэтому» — две запятые в сложноподчинённом предложении." },
-    { level: 4, type: "Орфография", question: "Как правильно?", answers: ["присутствовать", "пресутствовать", "присудствовать", "присутствовоть"], correct: "присутствовать", explanation: "«Присутствовать» — словарное слово. Запомните: при-сут-ство-вать." },
-    { level: 4, type: "Грамматика", question: "Определи падеж слова «красивым».", answers: ["Творительный", "Именительный", "Родительный", "Дательный"], correct: "Творительный", explanation: "«Красивым» — кем? чем? Творительный падеж." },
-    { level: 4, type: "Орфография", question: "Выбери правильное написание.", answers: ["бесшумный", "безшумный", "бесшумний", "безшумний"], correct: "бесшумный", explanation: "Перед глухой Ш пишется приставка бес-. Правило: без-/бес- перед глухими согласными." },
-    { level: 4, type: "Грамматика", question: "В каком предложении есть однородные члены?", answers: ["На столе лежали яблоки, груши и сливы.", "Мальчик читает книгу.", "Наступил вечер.", "Птицы улетели."], correct: "На столе лежали яблоки, груши и сливы.", explanation: "Однородные члены — «яблоки, груши, сливы»." },
-    { level: 4, type: "Словарный запас", question: "Что означает слово «компромисс»?", answers: ["Взаимная уступка ради решения спора", "Победа в соревновании", "Сильное удивление", "Отказ от общения"], correct: "Взаимная уступка ради решения спора", explanation: "«Компромисс» — соглашение на основе взаимных уступок." },
-    { level: 4, type: "Орфография", question: "Как правильно написать?", answers: ["преувеличивать", "приувеличивать", "преувиличивать", "приувиличивать"], correct: "преувеличивать", explanation: "Приставка пре- в значении «очень». «Преувеличивать» = очень увеличивать." },
-    { level: 4, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Когда закончился дождь, который шёл всю ночь, выглянуло солнце.", "Когда закончился дождь который, шёл всю ночь выглянуло солнце.", "Когда закончился, дождь который шёл всю ночь выглянуло солнце.", "Когда закончился дождь, который шёл всю ночь выглянуло солнце."], correct: "Когда закончился дождь, который шёл всю ночь, выглянуло солнце.", explanation: "Придаточное «который шёл всю ночь» выделяется запятыми с двух сторон." },
-    { level: 4, type: "Грамматика", question: "Какое слово является причастием?", answers: ["прочитанный", "прочитать", "прочитав", "чтение"], correct: "прочитанный", explanation: "Причастие отвечает на вопрос «какой?». «Прочитанный» — какой? Это причастие." },
-    { level: 4, type: "Внимательность", question: "Найди предложение без ошибки.", answers: ["Мы договорились встретиться после уроков.", "Мы договорились встретится после уроков.", "Мы договорились встретиться после урокав.", "Мы договорилис встретиться после уроков."], correct: "Мы договорились встретиться после уроков.", explanation: "«Встретиться» — что сделать? Возвратный глагол пишется с -ться." }
+
+    /* ---------- УРОВЕНЬ 2 ---------- */
+    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["привилегия","превилегия","привиллигия","привелегия"], correct: "привилегия", explanation: "«Привилегия» — словарное слово." },
+    { level: 2, type: "Орфография", question: "Выбери правильный вариант.", answers: ["рассказать","расказать","россказать","рассказат"], correct: "рассказать", explanation: "Пишется с двумя С: приставка рас- + корень -сказ-." },
+    { level: 2, type: "Орфография", question: "Как правильно написать?", answers: ["искусство","искуство","искустство","искуство"], correct: "искусство", explanation: "«Искусство» — словарное слово." },
+    { level: 2, type: "Грамматика", question: "Какое слово является прилагательным?", answers: ["красивый","красиво","красота","красоваться"], correct: "красивый", explanation: "Прилагательное — «красивый» (какой?)." },
+    { level: 2, type: "Грамматика", question: "Определи число слова «деревья».", answers: ["Множественное","Единственное","Двойственное","Числа нет"], correct: "Множественное", explanation: "«Деревья» — множественное число." },
+    { level: 2, type: "Антонимы", question: "Антоним к слову «широкий».", answers: ["Узкий","Длинный","Большой","Высокий"], correct: "Узкий", explanation: "«Широкий» ↔ «узкий»." },
+    { level: 2, type: "Синонимы", question: "Синоним к слову «огромный».", answers: ["Гигантский","Маленький","Узкий","Слабый"], correct: "Гигантский", explanation: "«Огромный» и «гигантский» — синонимы." },
+    { level: 2, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я хотел пойти гулять, но начался дождь.","Я хотел пойти гулять но, начался дождь.","Я хотел, пойти гулять но начался дождь.","Я хотел пойти, гулять но начался дождь."], correct: "Я хотел пойти гулять, но начался дождь.", explanation: "Перед союзом «но» ставится запятая." },
+    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["участвовать","учавствовать","участвововать","учавствувать"], correct: "участвовать", explanation: "«Участвовать» — словарное слово." },
+    { level: 2, type: "Грамматика", question: "В каком слове есть приставка?", answers: ["подземный","лес","стол","окно"], correct: "подземный", explanation: "В слове «подземный» приставка под-." },
+
+    { level: 2, type: "Грамматика", question: "Какого рода слово «пальто»?", answers: ["Средний","Мужской","Женский","Рода нет"], correct: "Средний", explanation: "«Пальто» — оно моё, средний род. Слово не изменяется по падежам." },
+    { level: 2, type: "Орфография", question: "Как пишется?", answers: ["он учится","он учиться","он учитца","он учитъся"], correct: "он учится", explanation: "Задаём вопрос: «он что делает?» — в вопросе нет Ь, значит пишем без Ь." },
+    { level: 2, type: "Орфография", question: "Выбери правильное написание.", answers: ["пришёл","прешёл","пришол","прешол"], correct: "пришёл", explanation: "Приставка при- в значении «приближение». Под ударением после шипящей пишем Ё." },
+    { level: 2, type: "Орфография", question: "Какая буква пропущена: «в_да»?", answers: ["о","а","ы","е"], correct: "о", explanation: "Проверочное слово — «во́ды». Пишем О." },
+    { level: 2, type: "Грамматика", question: "Определи падеж: «нет книги».", answers: ["Родительный","Дательный","Творительный","Винительный"], correct: "Родительный", explanation: "«Нет (кого? чего?) книги» — родительный падеж." },
+    { level: 2, type: "Орфография", question: "Как правильно?", answers: ["корова","карова","корава","коровва"], correct: "корова", explanation: "«Корова» — словарное слово, первая О непроверяемая." },
+    { level: 2, type: "Грамматика", question: "Какое спряжение у глагола «идти»?", answers: ["Первое","Второе","Третье","Спряжения нет"], correct: "Первое", explanation: "«Идти» — первое спряжение (не на -ить, не в списке исключений)." },
+    { level: 2, type: "Орфография", question: "Где пишется разделительный Ь?", answers: ["семья","семя","семйа","семяь"], correct: "семья", explanation: "Разделительный Ь пишется перед Е, Ё, Ю, Я внутри слова: «семья»." },
+    { level: 2, type: "Грамматика", question: "Определи число слова «ножницы».", answers: ["Только множественное","Только единственное","И то, и другое","Числа нет"], correct: "Только множественное", explanation: "«Ножницы» употребляются только во множественном числе." },
+    { level: 2, type: "Пунктуация", question: "Где стоит обращение?", answers: ["Маша, иди сюда.","Маша иди, сюда.","Маша иди сюда,","Маша: иди сюда."], correct: "Маша, иди сюда.", explanation: "Обращение «Маша» выделяется запятой." },
+
+
+    /* ---------- УРОВЕНЬ 3 ---------- */
+    { level: 3, type: "Орфография", question: "Как правильно написать?", answers: ["претворить мечту","притворить мечту","претварить мечту","притварить мечту"], correct: "претворить мечту", explanation: "«Претворить» (в жизнь) = осуществить. Приставка пре- в значении «пере-»." },
+    { level: 3, type: "Орфография", question: "Выбери правильный вариант.", answers: ["неожиданный","не ожиданный","неожиданый","не ожиданый"], correct: "неожиданный", explanation: "«Неожиданный» — пишется слитно и с двумя Н." },
+    { level: 3, type: "Грамматика", question: "Определи падеж слова: «к другу».", answers: ["Дательный","Родительный","Творительный","Предложный"], correct: "Дательный", explanation: "«К другу» — к кому? Дательный падеж." },
+    { level: 3, type: "Грамматика", question: "В каком предложении есть подлежащее?", answers: ["Птицы улетели на юг.","Очень холодно.","Стемнело.","Мне грустно."], correct: "Птицы улетели на юг.", explanation: "Подлежащее — «птицы» (кто?)." },
+    { level: 3, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Если будет тепло, мы поедем за город.","Если будет тепло мы, поедем за город.","Если, будет тепло мы поедем за город.","Если будет, тепло мы поедем за город."], correct: "Если будет тепло, мы поедем за город.", explanation: "Придаточное «если будет тепло» отделяется запятой." },
+    { level: 3, type: "Словарный запас", question: "Что означает слово «благородство»?", answers: ["Высокие моральные качества","Сильный страх","Быстрая реакция","Умение спорить"], correct: "Высокие моральные качества", explanation: "«Благородство» — честность, достоинство, великодушие." },
+    { level: 3, type: "Орфография", question: "Как правильно?", answers: ["рассвет","расвет","россвет","рассветт"], correct: "рассвет", explanation: "«Рассвет» пишется с двумя С." },
+    { level: 3, type: "Грамматика", question: "Какое слово является наречием?", answers: ["быстро","быстрый","быстрота","ускорить"], correct: "быстро", explanation: "Наречие отвечает на вопрос «как?»." },
+    { level: 3, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Солнце скрылось за тучами, и начался дождь.","Солнце скрылось за тучами и, начался дождь.","Солнце скрылось, за тучами и начался дождь.","Солнце скрылось за тучами и начался, дождь."], correct: "Солнце скрылось за тучами, и начался дождь.", explanation: "Перед союзом «и» между частями сложносочинённого предложения ставится запятая." },
+    { level: 3, type: "Синонимы", question: "Какое слово ближе всего к «настойчивый»?", answers: ["Упорный","Рассеянный","Ленивый","Испуганный"], correct: "Упорный", explanation: "«Настойчивый» и «упорный» — синонимы." },
+
+    { level: 3, type: "Орфография", question: "Как пишется НЕ с глаголами?", answers: ["не хочу","нехочу","нихачу","не-хочу"], correct: "не хочу", explanation: "НЕ с глаголами пишется раздельно." },
+    { level: 3, type: "Орфография", question: "Сколько Н в слове «кожаный»?", answers: ["Одна Н","Две НН","Три ННН","Зависит от контекста"], correct: "Одна Н", explanation: "Отымённое прилагательное с суффиксом -ан- пишется с одной Н." },
+    { level: 3, type: "Грамматика", question: "Какое слово является числительным?", answers: ["пять","пятёрка","пятый раз","пятиться"], correct: "пять", explanation: "Числительное отвечает на вопрос «сколько?». «Пять» — сколько?" },
+    { level: 3, type: "Грамматика", question: "Какое слово является местоимением?", answers: ["он","книга","быстрый","бегать"], correct: "он", explanation: "Местоимение указывает на предмет, но не называет его: «он»." },
+    { level: 3, type: "Грамматика", question: "Какое слово является предлогом?", answers: ["под","стол","лежит","быстро"], correct: "под", explanation: "Предлог — служебная часть речи: «под», «на», «в»." },
+    { level: 3, type: "Грамматика", question: "Какое слово является союзом?", answers: ["и","он","бежать","красный"], correct: "и", explanation: "Союз — служебная часть речи, связывает слова или предложения." },
+    { level: 3, type: "Грамматика", question: "Какое слово является частицей?", answers: ["бы","дом","пить","синий"], correct: "бы", explanation: "Частица «бы» придаёт глаголу условное значение." },
+    { level: 3, type: "Пунктуация", question: "Какое предложение восклицательное?", answers: ["Как красиво!","Как красиво.","Как красиво?","Как красиво,"], correct: "Как красиво!", explanation: "Восклицательный знак ставится в конце восклицательного предложения." },
+    { level: 3, type: "Орфография", question: "Как пишется «пр_красный»?", answers: ["прекрасный","прикрасный","прекрасный","прикрасный"], correct: "прекрасный", explanation: "Приставка пре- в значении «очень»." },
+    { level: 3, type: "Синонимы", question: "Синоним к слову «грустный».", answers: ["Печальный","Весёлый","Злой","Быстрый"], correct: "Печальный", explanation: "«Грустный» и «печальный» — синонимы." },
+
+
+    /* ---------- УРОВЕНЬ 4 ---------- */
+    { level: 4, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Я знал, что ты придёшь, поэтому приготовил ужин.","Я знал что, ты придёшь поэтому приготовил ужин.","Я знал, что ты придёшь поэтому, приготовил ужин.","Я знал что ты придёшь, поэтому приготовил ужин."], correct: "Я знал, что ты придёшь, поэтому приготовил ужин.", explanation: "Запятая перед «что» и перед «поэтому»." },
+    { level: 4, type: "Орфография", question: "Как правильно?", answers: ["присутствовать","пресутствовать","присудствовать","присутствовоть"], correct: "присутствовать", explanation: "«Присутствовать» — словарное слово." },
+    { level: 4, type: "Грамматика", question: "Определи падеж слова «красивым».", answers: ["Творительный","Именительный","Родительный","Дательный"], correct: "Творительный", explanation: "«Красивым» — кем? чем? Творительный падеж." },
+    { level: 4, type: "Орфография", question: "Выбери правильное написание.", answers: ["бесшумный","безшумный","бесшумний","безшумний"], correct: "бесшумный", explanation: "Перед глухой Ш пишется приставка бес-." },
+    { level: 4, type: "Грамматика", question: "В каком предложении есть однородные члены?", answers: ["На столе лежали яблоки, груши и сливы.","Мальчик читает книгу.","Наступил вечер.","Птицы улетели."], correct: "На столе лежали яблоки, груши и сливы.", explanation: "Однородные члены — «яблоки, груши, сливы»." },
+    { level: 4, type: "Словарный запас", question: "Что означает слово «компромисс»?", answers: ["Взаимная уступка ради решения спора","Победа в соревновании","Сильное удивление","Отказ от общения"], correct: "Взаимная уступка ради решения спора", explanation: "«Компромисс» — соглашение на основе взаимных уступок." },
+    { level: 4, type: "Орфография", question: "Как правильно написать?", answers: ["преувеличивать","приувеличивать","преувиличивать","приувиличивать"], correct: "преувеличивать", explanation: "Приставка пре- в значении «очень»." },
+    { level: 4, type: "Пунктуация", question: "Выбери правильное предложение.", answers: ["Когда закончился дождь, который шёл всю ночь, выглянуло солнце.","Когда закончился дождь который, шёл всю ночь выглянуло солнце.","Когда закончился, дождь который шёл всю ночь выглянуло солнце.","Когда закончился дождь, который шёл всю ночь выглянуло солнце."], correct: "Когда закончился дождь, который шёл всю ночь, выглянуло солнце.", explanation: "Придаточное «который шёл всю ночь» выделяется запятыми с двух сторон." },
+    { level: 4, type: "Грамматика", question: "Какое слово является причастием?", answers: ["прочитанный","прочитать","прочитав","чтение"], correct: "прочитанный", explanation: "Причастие отвечает на вопрос «какой?»." },
+    { level: 4, type: "Внимательность", question: "Найди предложение без ошибки.", answers: ["Мы договорились встретиться после уроков.","Мы договорились встретится после уроков.","Мы договорились встретиться после урокав.","Мы договорилис встретиться после уроков."], correct: "Мы договорились встретиться после уроков.", explanation: "«Встретиться» — что сделать? Пишем с -ться." },
+
+    { level: 4, type: "Грамматика", question: "Какое слово является деепричастием?", answers: ["читая","читать","прочитанный","чтение"], correct: "читая", explanation: "Деепричастие обозначает добавочное действие: «читая» (что делая?)." },
+    { level: 4, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Книга, написанная автором, лежала на столе.","Книга написанная автором, лежала на столе.","Книга, написанная автором лежала на столе.","Книга написанная, автором лежала на столе."], correct: "Книга, написанная автором, лежала на столе.", explanation: "Причастный оборот после определяемого слова выделяется запятыми с двух сторон." },
+    { level: 4, type: "Пунктуация", question: "Выбери правильный вариант.", answers: ["Он шёл, напевая песню.","Он шёл напевая песню.","Он шёл, напевая, песню.","Он, шёл напевая песню."], correct: "Он шёл, напевая песню.", explanation: "Деепричастный оборот выделяется запятой." },
+    { level: 4, type: "Пунктуация", question: "Где нужно тире?", answers: ["Москва — столица России.","Москва, столица России.","Москва: столица России.","Москва столица России."], correct: "Москва — столица России.", explanation: "Тире ставится между подлежащим и сказуемым, выраженными существительными." },
+    { level: 4, type: "Пунктуация", question: "Где нужно двоеточие?", answers: ["В корзине лежали фрукты: яблоки, груши, сливы.","В корзине лежали фрукты, яблоки, груши, сливы.","В корзине лежали фрукты — яблоки, груши, сливы.","В корзине лежали фрукты яблоки, груши, сливы."], correct: "В корзине лежали фрукты: яблоки, груши, сливы.", explanation: "Двоеточие ставится перед перечислением после обобщающего слова." },
+    { level: 4, type: "Пунктуация", question: "Где нужно выделить вводное слово?", answers: ["Кажется, будет дождь.","Кажется будет дождь.","Кажется: будет дождь.","Кажется — будет дождь."], correct: "Кажется, будет дождь.", explanation: "Вводное слово «кажется» выделяется запятой." },
+    { level: 4, type: "Орфография", question: "Как пишется наречие?", answers: ["налево","на лево","на-лево","налевво"], correct: "налево", explanation: "Наречия с приставками на-, за-, в- пишутся слитно с суффиксом -о: «налево»." },
+    { level: 4, type: "Пунктуация", question: "Где стоит обращение?", answers: ["Друзья, я рад вас видеть!","Друзья я рад вас видеть!","Друзья: я рад вас видеть!","Друзья — я рад вас видеть!"], correct: "Друзья, я рад вас видеть!", explanation: "Обращение «Друзья» выделяется запятой." },
+    { level: 4, type: "Орфография", question: "Как пишется НЕ с прилагательным?", answers: ["небольшой","не большой","не-большой","нибольшой"], correct: "небольшой", explanation: "Если можно заменить синонимом («маленький») — пишем слитно." },
+    { level: 4, type: "Грамматика", question: "Определи вид глагола «делать».", answers: ["Несовершенный","Совершенный","Средний","Особый"], correct: "Несовершенный", explanation: "«Делать» — что делать? Несовершенный вид (нет приставки, нет завершённости)." }
+
 ];
 
 
-const TIME_PER_QUESTION = 30;
+/* ============================================================
+   НАСТРОЙКИ
+   ============================================================ */
+
+const TIME_PER_QUESTION = 30;   // секунд на вопрос
+const QUESTIONS_PER_GAME = 20;  // сколько заданий в одной игре
+
+
+/* ============================================================
+   ПЕРЕМЕННЫЕ ИГРЫ
+   ============================================================ */
 
 let currentQuestion = 0;
 let score = 0;
@@ -442,7 +324,7 @@ let streak = 0;
 let answered = false;
 let timeLeft = TIME_PER_QUESTION;
 let timerInterval = null;
-let gameQuestions = [...questions];
+let gameQuestions = [];
 let bestScore = 0;
 
 try {
@@ -450,17 +332,33 @@ try {
 } catch (e) { bestScore = 0; }
 
 
+/* ============================================================
+   ВСПОМОГАТЕЛЬНОЕ: перемешивание массива (Фишер–Йетс)
+   ============================================================ */
+
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+
+/* ============================================================
+   НАЧАЛО ИГРЫ
+   ============================================================ */
+
 function startGame() {
+
     currentQuestion = 0;
     score = 0;
     streak = 0;
     answered = false;
 
-    gameQuestions = [...questions];
-    for (let i = gameQuestions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [gameQuestions[i], gameQuestions[j]] = [gameQuestions[j], gameQuestions[i]];
-    }
+    // Берём из общего пула случайные 20 заданий
+    gameQuestions = shuffle(questions).slice(0, QUESTIONS_PER_GAME);
 
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("resultScreen").style.display = "none";
@@ -470,6 +368,10 @@ function startGame() {
     showQuestion();
 }
 
+
+/* ============================================================
+   ТАЙМЕР
+   ============================================================ */
 
 function startTimer() {
     stopTimer();
@@ -497,20 +399,22 @@ function updateTimerDisplay() {
     const timerEl = document.getElementById("timer");
     const timerBox = document.getElementById("timerBox");
     timerEl.textContent = timeLeft;
-    if (timeLeft <= 10) {
-        timerBox.classList.add("warning");
-    } else {
-        timerBox.classList.remove("warning");
-    }
+    if (timeLeft <= 10) timerBox.classList.add("warning");
+    else timerBox.classList.remove("warning");
 }
 
 
-function showQuestion() {
-    answered = false;
+/* ============================================================
+   ПОКАЗ ЗАДАНИЯ
+   ============================================================ */
 
+function showQuestion() {
+
+    answered = false;
     const q = gameQuestions[currentQuestion];
 
-    document.getElementById("level").textContent = "Уровень " + q.level + " — " + q.type;
+    document.getElementById("level").textContent =
+        "Уровень " + q.level + " — " + q.type;
     document.getElementById("questionNumber").textContent = (currentQuestion + 1);
     document.getElementById("question").textContent = q.question;
     document.getElementById("questionType").textContent = q.type;
@@ -527,11 +431,7 @@ function showQuestion() {
 
     document.getElementById("nextButton").style.display = "none";
 
-    const shuffledAnswers = [...q.answers];
-    for (let i = shuffledAnswers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledAnswers[i], shuffledAnswers[j]] = [shuffledAnswers[j], shuffledAnswers[i]];
-    }
+    const shuffledAnswers = shuffle(q.answers);
 
     shuffledAnswers.forEach(function(option) {
         const btn = document.createElement("button");
@@ -548,7 +448,12 @@ function showQuestion() {
 }
 
 
+/* ============================================================
+   ПРОВЕРКА ОТВЕТА
+   ============================================================ */
+
 function checkAnswer(answer, button) {
+
     if (answered) return;
     answered = true;
     stopTimer();
@@ -585,6 +490,10 @@ function checkAnswer(answer, button) {
 }
 
 
+/* ============================================================
+   КОГДА ВРЕМЯ ВЫШЛО
+   ============================================================ */
+
 function timeOut() {
     if (answered) return;
     answered = true;
@@ -608,6 +517,10 @@ function timeOut() {
 }
 
 
+/* ============================================================
+   ОБЪЯСНЕНИЕ
+   ============================================================ */
+
 function showExplanation(text) {
     if (!text) return;
     const explEl = document.getElementById("explanation");
@@ -615,6 +528,10 @@ function showExplanation(text) {
     explEl.style.display = "block";
 }
 
+
+/* ============================================================
+   СЛЕДУЮЩИЙ ВОПРОС
+   ============================================================ */
 
 function nextQuestion() {
     stopTimer();
@@ -629,13 +546,22 @@ function nextQuestion() {
 }
 
 
+/* ============================================================
+   СТАТИСТИКА
+   ============================================================ */
+
 function updateStats() {
     document.getElementById("score").textContent = score;
     document.getElementById("streak").textContent = streak;
 }
 
 
+/* ============================================================
+   ФИНАЛ
+   ============================================================ */
+
 function finishGame() {
+
     stopTimer();
 
     document.getElementById("gameScreen").style.display = "none";
@@ -646,16 +572,17 @@ function finishGame() {
     let stars = "";
     let message = "";
 
-    if (score >= 450) {
+    // Максимум за игру: 20 × (10 + 5 + 5) = 400
+    if (score >= 300) {
         stars = "⭐⭐⭐⭐⭐";
         message = "Выдающийся результат! Русский язык тебе действительно хорошо знаком.";
-    } else if (score >= 370) {
+    } else if (score >= 240) {
         stars = "⭐⭐⭐⭐";
         message = "Отличный результат. Ты уверенно справляешься со сложными заданиями.";
-    } else if (score >= 270) {
+    } else if (score >= 170) {
         stars = "⭐⭐⭐";
         message = "Хороший результат. Есть знания, но некоторые правила стоит повторить.";
-    } else if (score >= 150) {
+    } else if (score >= 100) {
         stars = "⭐⭐";
         message = "Неплохое начало. Повтори основные правила и попробуй снова.";
     } else {
@@ -683,10 +610,13 @@ function finishGame() {
 }
 
 
+/* ============================================================
+   ЛУЧШИЙ РЕЗУЛЬТАТ
+   ============================================================ */
+
 function updateBestScoreOnStart() {
     const block = document.getElementById("bestScoreStart");
     const value = document.getElementById("bestScoreValueStart");
-
     if (bestScore > 0) {
         value.textContent = bestScore;
         block.style.display = "inline-block";
@@ -696,11 +626,14 @@ function updateBestScoreOnStart() {
 }
 
 
+/* ============================================================
+   НОВАЯ ИГРА
+   ============================================================ */
+
 function restartGame() { startGame(); }
 
 updateBestScoreOnStart();
 
 </script>
-
 </body>
 </html>
