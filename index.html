@@ -1,430 +1,876 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b18">
 <title>Грамотей 10+ — образовательная игра</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+:root{
+ --bg:#070b18;
+ --bg2:#0d1328;
+ --card:rgba(19,27,52,.88);
+ --card2:rgba(28,38,72,.9);
+ --text:#f7f9ff;
+ --muted:#9ba7c7;
+ --blue:#5b8cff;
+ --cyan:#4de7ff;
+ --violet:#9b70ff;
+ --green:#45df99;
+ --red:#ff627a;
+ --gold:#ffd766;
+ --orange:#ff9b55;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #10172b, #182c4d, #101827);
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+html,body{
+ margin:0;
+ padding:0;
+ min-height:100%;
+ font-family:Segoe UI,Arial,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at 15% 10%,rgba(70,100,255,.25),transparent 30%),
+ radial-gradient(circle at 85% 85%,rgba(155,70,255,.2),transparent 30%),
+ var(--bg);
 }
 
-.game {
-    width: 100%;
-    max-width: 900px;
-    background: rgba(10, 16, 30, 0.97);
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+body{
+ overflow-x:hidden;
 }
 
-.screen {
-    display: none;
+button{
+ font-family:inherit;
 }
 
-.screen.active {
-    display: block;
+.app{
+ width:min(1100px,94vw);
+ margin:auto;
+ min-height:100vh;
+ padding:20px 0 40px;
 }
 
-h1 {
-    font-size: clamp(36px, 7vw, 60px);
-    margin: 0 0 10px;
+.screen{
+ display:none;
+ min-height:calc(100vh - 60px);
+ align-items:center;
+ justify-content:center;
 }
 
-h2 {
-    font-size: 32px;
+.screen.active{
+ display:flex;
 }
 
-.subtitle {
-    color: #c6d2e7;
-    font-size: 18px;
-    line-height: 1.6;
+.card{
+ background:linear-gradient(
+  145deg,
+  rgba(25,34,65,.94),
+  rgba(10,15,32,.94)
+ );
+ border:1px solid rgba(255,255,255,.1);
+ box-shadow:
+  0 30px 90px rgba(0,0,0,.45),
+  inset 0 1px rgba(255,255,255,.07);
+ backdrop-filter:blur(20px);
+ border-radius:32px;
 }
 
-.info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 25px 0;
+.start{
+ width:min(920px,100%);
+ padding:45px;
+ text-align:center;
+ position:relative;
+ overflow:hidden;
 }
 
-.info-box {
-    background: #18243d;
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
+.start:before{
+ content:"";
+ position:absolute;
+ width:360px;
+ height:360px;
+ background:#526fff;
+ border-radius:50%;
+ filter:blur(120px);
+ opacity:.18;
+ top:-180px;
+ left:50%;
+ transform:translateX(-50%);
 }
 
-.info-box span {
-    display: block;
-    color: #aab9d2;
-    font-size: 14px;
-    margin-bottom: 5px;
+.badge{
+ position:relative;
+ display:inline-block;
+ padding:9px 17px;
+ border-radius:50px;
+ color:#cbd6ff;
+ background:rgba(91,140,255,.12);
+ border:1px solid rgba(91,140,255,.3);
+ font-size:14px;
+ font-weight:700;
 }
 
-.info-box strong {
-    font-size: 25px;
+.logo{
+ position:relative;
+ font-size:clamp(48px,9vw,86px);
+ line-height:.9;
+ font-weight:950;
+ letter-spacing:-4px;
+ margin:25px 0 20px;
+ background:linear-gradient(
+  90deg,
+  #fff,
+  #66eaff,
+  #9b78ff,
+  #fff
+ );
+ background-size:250% auto;
+ color:transparent;
+ background-clip:text;
+ animation:shine 5s linear infinite;
 }
 
-button {
-    border: none;
-    border-radius: 14px;
-    padding: 15px 22px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
+@keyframes shine{
+ to{background-position:250% center}
 }
 
-button:hover {
-    transform: translateY(-2px);
+.subtitle{
+ color:var(--muted);
+ max-width:700px;
+ margin:0 auto 28px;
+ line-height:1.6;
+ font-size:18px;
 }
 
-.primary {
-    background: #4d8dff;
-    color: white;
+.subjects{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:13px;
+ margin:30px 0;
 }
 
-.primary:hover {
-    background: #6ca2ff;
+.subject{
+ padding:20px 12px;
+ border-radius:20px;
+ background:rgba(255,255,255,.035);
+ border:1px solid rgba(255,255,255,.07);
+ transition:.25s;
 }
 
-.secondary {
-    background: #273650;
-    color: white;
+.subject:hover{
+ transform:translateY(-5px);
+ border-color:rgba(91,140,255,.4);
+ background:rgba(91,140,255,.07);
 }
 
-.start-info {
-    background: #151f35;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 25px 0;
-    line-height: 1.7;
+.subject .icon{
+ display:block;
+ font-size:34px;
+ margin-bottom:10px;
 }
 
-.subject-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 15px;
+.subject b{
+ font-size:14px;
 }
 
-.subject {
-    background: #202d48;
-    padding: 12px;
-    border-radius: 10px;
+.subject span{
+ display:block;
+ color:#7885a8;
+ font-size:11px;
+ margin-top:5px;
 }
 
-.progress {
-    width: 100%;
-    height: 10px;
-    background: #202d45;
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 15px 0 25px;
+.primary{
+ border:0;
+ color:white;
+ cursor:pointer;
+ padding:16px 32px;
+ border-radius:17px;
+ font-size:17px;
+ font-weight:800;
+ background:linear-gradient(135deg,#5b8cff,#7958ff);
+ box-shadow:0 14px 35px rgba(91,140,255,.3);
+ transition:.2s;
 }
 
-.progress-bar {
-    width: 0;
-    height: 100%;
-    background: #4d8dff;
-    transition: width 0.3s;
+.primary:hover{
+ transform:translateY(-3px);
+ box-shadow:0 18px 45px rgba(91,140,255,.45);
 }
 
-.subject-badge {
-    display: inline-block;
-    padding: 8px 13px;
-    border-radius: 20px;
-    background: #293957;
-    color: #dce7fb;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
+.hint{
+ color:#6f7b9d;
+ font-size:12px;
+ margin-top:17px;
 }
 
-.question-number {
-    color: #9eafca;
-    margin-bottom: 10px;
+/* GAME */
+
+.game{
+ width:min(920px,100%);
 }
 
-.question {
-    font-size: clamp(23px, 4vw, 34px);
-    line-height: 1.4;
-    margin: 15px 0 25px;
+.topbar{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ margin-bottom:18px;
+ flex-wrap:wrap;
 }
 
-.options {
-    display: grid;
-    gap: 12px;
+.stat{
+ min-width:105px;
+ padding:10px 14px;
+ border-radius:15px;
+ background:rgba(12,18,37,.82);
+ border:1px solid rgba(255,255,255,.08);
 }
 
-.option {
-    width: 100%;
-    text-align: left;
-    background: #1b2944;
-    color: #ffffff;
-    border: 2px solid transparent;
+.stat small{
+ display:block;
+ color:#74809f;
+ font-size:10px;
+ text-transform:uppercase;
+ letter-spacing:1px;
 }
 
-.option:hover {
-    border-color: #4d8dff;
-    background: #223453;
+.stat b{
+ font-size:17px;
 }
 
-.option.correct {
-    background: #176943;
-    border-color: #38d98b;
+.progress{
+ flex:1;
+ height:9px;
+ min-width:150px;
+ border-radius:20px;
+ overflow:hidden;
+ background:rgba(255,255,255,.07);
 }
 
-.option.wrong {
-    background: #762832;
-    border-color: #ff6b78;
+.progress i{
+ display:block;
+ width:0;
+ height:100%;
+ border-radius:20px;
+ background:linear-gradient(
+  90deg,
+  var(--cyan),
+  var(--blue),
+  var(--violet)
+ );
+ transition:.4s;
 }
 
-.option:disabled {
-    cursor: default;
+.question-card{
+ padding:30px;
 }
 
-.feedback {
-    min-height: 30px;
-    margin: 20px 0;
-    font-weight: bold;
-    line-height: 1.5;
+.qmeta{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ color:#8490b0;
+ font-size:13px;
+ margin-bottom:18px;
 }
 
-.next-area {
-    text-align: right;
+.subject-tag{
+ padding:7px 12px;
+ border-radius:10px;
+ color:#cbd6ff;
+ background:rgba(91,140,255,.12);
+ border:1px solid rgba(91,140,255,.25);
+ font-weight:700;
 }
 
-.result {
-    text-align: center;
+/* ILLUSTRATION */
+
+.illustration{
+ height:240px;
+ border-radius:24px;
+ margin-bottom:25px;
+ overflow:hidden;
+ position:relative;
+ background:
+ linear-gradient(145deg,#111a38,#0a1023);
+ border:1px solid rgba(255,255,255,.08);
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
-.stars {
-    font-size: 48px;
-    letter-spacing: 4px;
-    margin: 20px 0;
+.illustration svg{
+ width:100%;
+ height:100%;
 }
 
-.final-score {
-    font-size: 44px;
-    font-weight: bold;
-    margin-bottom: 10px;
+.illustration .big-icon{
+ font-size:100px;
+ filter:drop-shadow(0 15px 25px rgba(0,0,0,.4));
+ animation:float 3s ease-in-out infinite;
 }
 
-.result-table {
-    margin: 25px auto;
-    width: 100%;
-    max-width: 600px;
-    border-collapse: collapse;
-    overflow: hidden;
-    border-radius: 12px;
+@keyframes float{
+ 50%{transform:translateY(-8px)}
 }
 
-.result-table td {
-    padding: 14px;
-    border-bottom: 1px solid #2a3955;
-    background: #18243c;
+.question{
+ font-size:clamp(25px,4vw,40px);
+ line-height:1.22;
+ margin:0 0 25px;
+ letter-spacing:-.7px;
 }
 
-.result-table td:last-child {
-    text-align: right;
-    font-weight: bold;
+.answers{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:13px;
 }
 
-.result-message {
-    color: #c8d4e8;
-    line-height: 1.6;
+.answer{
+ min-height:74px;
+ text-align:left;
+ border:1px solid rgba(255,255,255,.09);
+ background:rgba(255,255,255,.035);
+ color:white;
+ border-radius:17px;
+ padding:14px 17px;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ cursor:pointer;
+ transition:.18s;
 }
 
-.cycle-info {
-    margin-top: 20px;
-    color: #92a4c0;
-    font-size: 14px;
+.answer:hover:not(:disabled){
+ transform:translateY(-3px);
+ border-color:rgba(91,140,255,.6);
+ background:rgba(91,140,255,.1);
 }
 
-@media (max-width: 650px) {
-    body {
-        padding: 10px;
-    }
+.answer .letter{
+ width:34px;
+ height:34px;
+ flex:none;
+ display:grid;
+ place-items:center;
+ border-radius:10px;
+ background:rgba(255,255,255,.08);
+ color:#aab5d5;
+ font-weight:800;
+}
 
-    .game {
-        padding: 20px;
-        border-radius: 18px;
-    }
+.answer.correct{
+ background:rgba(69,223,153,.13);
+ border-color:rgba(69,223,153,.7);
+ box-shadow:0 0 35px rgba(69,223,153,.12);
+}
 
-    .info {
-        grid-template-columns: 1fr;
-    }
+.answer.correct .letter{
+ background:var(--green);
+ color:#06150e;
+}
 
-    .subject-list {
-        grid-template-columns: 1fr;
-    }
+.answer.wrong{
+ background:rgba(255,98,122,.12);
+ border-color:rgba(255,98,122,.7);
+}
 
-    button {
-        width: 100%;
-    }
+.answer.wrong .letter{
+ background:var(--red);
+ color:white;
+}
 
-    .next-area {
-        margin-top: 10px;
-    }
+.feedback{
+ min-height:35px;
+ padding:18px 0 4px;
+ text-align:center;
+ font-weight:800;
+}
+
+.feedback.good{
+ color:var(--green);
+}
+
+.feedback.bad{
+ color:var(--red);
+}
+
+.next-wrap{
+ text-align:center;
+ margin-top:8px;
+}
+
+.next{
+ display:none;
+}
+
+/* REST */
+
+.rest{
+ width:min(850px,100%);
+ padding:40px;
+ text-align:center;
+ position:relative;
+ overflow:hidden;
+}
+
+.rest:before{
+ content:"";
+ position:absolute;
+ width:300px;
+ height:300px;
+ background:#6e4cff;
+ filter:blur(100px);
+ opacity:.16;
+ top:-160px;
+ left:50%;
+ transform:translateX(-50%);
+}
+
+.cat{
+ position:relative;
+ width:180px;
+ height:180px;
+ margin:0 auto 15px;
+ border-radius:50%;
+ background:linear-gradient(145deg,#e4a56b,#9b633e);
+ border:7px solid #70452d;
+ box-shadow:0 20px 50px rgba(0,0,0,.4);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:100px;
+ animation:catFloat 2.4s ease-in-out infinite;
+}
+
+@keyframes catFloat{
+ 50%{transform:translateY(-8px) rotate(1deg)}
+}
+
+.rest h1{
+ font-size:38px;
+ margin:10px 0;
+}
+
+.rest .fact{
+ max-width:680px;
+ margin:20px auto;
+ padding:24px;
+ border-radius:22px;
+ background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.08);
+ font-size:20px;
+ line-height:1.6;
+}
+
+.cat-name{
+ color:var(--gold);
+ font-weight:900;
+}
+
+/* RESULT */
+
+.result{
+ width:min(880px,100%);
+ padding:40px;
+ text-align:center;
+}
+
+.trophy{
+ font-size:70px;
+ animation:float 2.3s ease-in-out infinite;
+}
+
+.result h1{
+ font-size:42px;
+ margin:10px 0;
+}
+
+.score{
+ font-size:64px;
+ font-weight:950;
+ background:linear-gradient(90deg,#fff,#5cecff,#a17cff);
+ background-clip:text;
+ color:transparent;
+}
+
+.stars{
+ color:var(--gold);
+ font-size:34px;
+ letter-spacing:5px;
+ margin:5px 0 20px;
+}
+
+.result-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:12px;
+ margin:25px 0;
+}
+
+.result-item{
+ padding:18px 10px;
+ border-radius:18px;
+ background:rgba(255,255,255,.035);
+ border:1px solid rgba(255,255,255,.07);
+}
+
+.result-item .ri{
+ font-size:28px;
+}
+
+.result-item b{
+ display:block;
+ margin-top:8px;
+}
+
+.result-item span{
+ display:block;
+ color:#8995b4;
+ font-size:13px;
+ margin-top:5px;
+}
+
+.achievements{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:8px;
+ margin:20px 0 28px;
+}
+
+.achievement{
+ padding:9px 13px;
+ border-radius:12px;
+ color:#ffe89a;
+ background:rgba(255,215,102,.09);
+ border:1px solid rgba(255,215,102,.25);
+ font-size:13px;
+ font-weight:700;
+}
+
+/* ABOUT */
+
+.about{
+ margin-top:30px;
+ padding:20px;
+ border-top:1px solid rgba(255,255,255,.07);
+ color:#8994b3;
+ font-size:12px;
+ line-height:1.7;
+}
+
+.about strong{
+ color:#d8def1;
+}
+
+/* CONFETTI */
+
+.confetti{
+ position:fixed;
+ top:-20px;
+ width:7px;
+ height:13px;
+ z-index:100;
+ animation:fall linear forwards;
+ pointer-events:none;
+}
+
+@keyframes fall{
+ to{
+  transform:translate3d(var(--x),110vh,0) rotate(720deg);
+  opacity:.9;
+ }
+}
+
+.shake{
+ animation:shake .35s;
+}
+
+@keyframes shake{
+ 25%{transform:translateX(-6px)}
+ 50%{transform:translateX(6px)}
+ 75%{transform:translateX(-4px)}
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+ .app{
+  width:94vw;
+ }
+
+ .start,
+ .rest,
+ .result,
+ .question-card{
+  padding:22px 17px;
+  border-radius:24px;
+ }
+
+ .logo{
+  letter-spacing:-2px;
+ }
+
+ .subjects{
+  grid-template-columns:1fr 1fr;
+ }
+
+ .answers{
+  grid-template-columns:1fr;
+ }
+
+ .illustration{
+  height:190px;
+ }
+
+ .question{
+  font-size:27px;
+ }
+
+ .result-grid{
+  grid-template-columns:1fr 1fr;
+ }
+
+ .stat{
+  flex:1;
+  min-width:0;
+ }
+
+ .progress{
+  flex-basis:100%;
+  order:5;
+ }
+
+ .rest h1{
+  font-size:30px;
+ }
+
+ .rest .fact{
+  font-size:17px;
+ }
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="game">
+<div class="app">
 
-<!-- =========================
-     СТАРТОВЫЙ ЭКРАН
-========================= -->
+<!-- START -->
 
 <section id="startScreen" class="screen active">
 
-    <h1>Грамотей 10+</h1>
+<div class="card start">
 
-    <p class="subtitle">
-        Образовательная викторина на знания, логику и внимательность.
-    </p>
+<div class="badge">✦ ОБРАЗОВАТЕЛЬНАЯ ИГРА 10+</div>
 
-    <div class="start-info">
+<div class="logo">ГРАМОТЕЙ</div>
 
-        <strong>В каждой игре — 20 вопросов</strong>
+<p class="subtitle">
+20 вопросов. 4 предмета. Красивые иллюстрации, интересные факты
+и маленькие сюрпризы после каждого раунда.
+</p>
 
-        <div class="subject-list">
-            <div class="subject">Русский язык — 5</div>
-            <div class="subject">Математика — 5</div>
-            <div class="subject">История России — 5</div>
-            <div class="subject">География — 5</div>
-        </div>
+<div class="subjects">
 
-        <p>
-            Всего в игре 80 уникальных вопросов.
-            Пока все вопросы не будут использованы,
-            повторов между играми не будет.
-        </p>
+<div class="subject">
+<span class="icon">📚</span>
+<b>Русский язык</b>
+<span>слова и правила</span>
+</div>
 
-    </div>
+<div class="subject">
+<span class="icon">🧮</span>
+<b>Математика</b>
+<span>числа и логика</span>
+</div>
 
-    <button class="primary" onclick="startGame()">
-        Начать игру
-    </button>
+<div class="subject">
+<span class="icon">🏛️</span>
+<b>История России</b>
+<span>события и личности</span>
+</div>
+
+<div class="subject">
+<span class="icon">🌍</span>
+<b>География</b>
+<span>страны и планета</span>
+</div>
+
+</div>
+
+<button class="primary" id="startBtn">
+▶ НАЧАТЬ ИГРУ
+</button>
+
+<div class="hint">
+После каждых 5 вопросов тебя ждёт встреча с котом-рассказчиком.
+</div>
+
+<div class="about">
+<strong>ГРАМОТЕЙ 10+</strong><br>
+Автор и разработчик: <strong>Вячеслав</strong><br>
+ИИ-помощник: <strong>Джарвис</strong><br>
+© 2026 Вячеслав. Все права на оригинальную игру защищены.
+</div>
+
+</div>
 
 </section>
 
 
-<!-- =========================
-     ИГРОВОЙ ЭКРАН
-========================= -->
+<!-- GAME -->
 
 <section id="gameScreen" class="screen">
 
-    <div class="info">
+<div class="game">
 
-        <div class="info-box">
-            <span>Очки</span>
-            <strong id="score">0</strong>
-        </div>
+<div class="topbar">
 
-        <div class="info-box">
-            <span>Серия</span>
-            <strong id="streak">0</strong>
-        </div>
+<div class="stat">
+<small>Очки</small>
+<b id="score">0</b>
+</div>
 
-        <div class="info-box">
-            <span>Вопрос</span>
-            <strong id="counter">1 / 20</strong>
-        </div>
+<div class="stat">
+<small>Серия</small>
+<b id="streak">0 ×</b>
+</div>
 
-    </div>
+<div class="stat">
+<small>Вопрос</small>
+<b id="counter">1 / 20</b>
+</div>
 
-    <div class="progress">
-        <div id="progressBar" class="progress-bar"></div>
-    </div>
+<div class="progress">
+<i id="progressBar"></i>
+</div>
 
-    <div id="subjectBadge" class="subject-badge"></div>
+</div>
 
-    <div id="questionNumber" class="question-number"></div>
 
-    <div id="question" class="question"></div>
+<div class="card question-card" id="questionCard">
 
-    <div id="options" class="options"></div>
+<div class="qmeta">
 
-    <div id="feedback" class="feedback"></div>
+<span class="subject-tag" id="subject">
+Предмет
+</span>
 
-    <div class="next-area">
+<span id="qNumber">
+ВОПРОС 01
+</span>
 
-        <button
-            id="nextButton"
-            class="primary"
-            onclick="nextQuestion()"
-            style="display:none;">
-            Следующий вопрос →
-        </button>
+</div>
 
-    </div>
+
+<div class="illustration" id="illustration"></div>
+
+
+<h2 class="question" id="question">
+Вопрос
+</h2>
+
+
+<div class="answers" id="answers"></div>
+
+
+<div class="feedback" id="feedback"></div>
+
+
+<div class="next-wrap">
+<button class="primary next" id="nextBtn">
+СЛЕДУЮЩИЙ ВОПРОС →
+</button>
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- =========================
-     РЕЗУЛЬТАТ
-========================= -->
+<!-- REST -->
 
-<section id="resultScreen" class="screen result">
+<section id="restScreen" class="screen">
 
-    <h2>Игра окончена!</h2>
+<div class="card rest">
 
-    <div id="stars" class="stars"></div>
+<div class="cat">
+🐱
+</div>
 
-    <div id="finalScore" class="final-score"></div>
+<div class="badge">ПЕРЕРЫВ</div>
 
-    <p id="resultMessage" class="result-message"></p>
+<h1>
+Кот-рассказчик
+</h1>
 
-    <table class="result-table">
+<p>
+<span class="cat-name">Кот Барсик:</span>
+«Так, учёба учёбой, а мозгу тоже нужен отдых!»
+</p>
 
-        <tr>
-            <td>Русский язык</td>
-            <td id="russianResult">0 / 5</td>
-        </tr>
+<div class="fact" id="fact">
+Интересный факт
+</div>
 
-        <tr>
-            <td>Математика</td>
-            <td id="mathResult">0 / 5</td>
-        </tr>
+<button class="primary" id="continueBtn">
+▶ ПРОДОЛЖИТЬ
+</button>
 
-        <tr>
-            <td>История России</td>
-            <td id="historyResult">0 / 5</td>
-        </tr>
+</div>
 
-        <tr>
-            <td>География</td>
-            <td id="geographyResult">0 / 5</td>
-        </tr>
+</section>
 
-    </table>
 
-    <p id="cycleInfo" class="cycle-info"></p>
+<!-- RESULT -->
 
-    <button class="primary" onclick="restartGame()">
-        Играть снова
-    </button>
+<section id="resultScreen" class="screen">
+
+<div class="card result">
+
+<div class="trophy" id="trophy">
+🏆
+</div>
+
+<h1>
+Игра завершена!
+</h1>
+
+<div class="score" id="finalScore">
+0
+</div>
+
+<div class="stars" id="stars">
+☆☆☆☆☆
+</div>
+
+<p class="subtitle" id="resultText"></p>
+
+<div class="result-grid" id="resultGrid"></div>
+
+<div class="achievements" id="achievements"></div>
+
+<button class="primary" id="againBtn">
+↻ ИГРАТЬ ЕЩЁ
+</button>
+
+<div class="about">
+<strong>ГРАМОТЕЙ 10+</strong><br>
+Автор и разработчик: <strong>Вячеслав</strong><br>
+ИИ-помощник: <strong>Джарвис</strong><br>
+Версия 1.0 · 2026
+</div>
+
+</div>
 
 </section>
 
@@ -433,1522 +879,1678 @@ button:hover {
 
 <script>
 
-/* =========================================================
-   БАЗА ВОПРОСОВ
-   20 вопросов на каждый предмет
-   ВСЕГО 80
-========================================================= */
+/* =====================================================
+   ВОПРОСЫ
+===================================================== */
 
 const questions = [
 
-/* =========================================================
-   РУССКИЙ ЯЗЫК — 20
-========================================================= */
+/* ================= РУССКИЙ ЯЗЫК ================= */
 
 {
-    id: "ru1",
-    subject: "Русский язык",
-    question: "Какое слово написано правильно?",
-    options: ["Превет", "Привет", "Привед", "Превиет"],
-    answer: "Привет"
+subject:"Русский язык",
+icon:"📚",
+type:"letters",
+q:"Сколько букв в русском алфавите?",
+a:["33","32","34","31"],
+c:0
 },
 
 {
-    id: "ru2",
-    subject: "Русский язык",
-    question: "Как правильно написать слово?",
-    options: ["Интересный", "Интиресный", "Интерестный", "Интирестный"],
-    answer: "Интересный"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово является синонимом слова «смелый»?",
+a:["Храбрый","Тихий","Грустный","Медленный"],
+c:0
 },
 
 {
-    id: "ru3",
-    subject: "Русский язык",
-    question: "Выбери правильный вариант: «У меня нет ...»",
-    options: ["карандаш", "карандаша", "карандашем", "карандашу"],
-    answer: "карандаша"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово является антонимом слова «высокий»?",
+a:["Низкий","Большой","Широкий","Длинный"],
+c:0
 },
 
 {
-    id: "ru4",
-    subject: "Русский язык",
-    question: "Какое слово написано правильно?",
-    options: ["Обезьяна", "Обезяна", "Обизьяна", "Абезьяна"],
-    answer: "Обезьяна"
+subject:"Русский язык",
+icon:"📚",
+type:"letter",
+q:"В каком слове пишется буква «ё»?",
+a:["ёлка","мел","лес","сено"],
+c:0
 },
 
 {
-    id: "ru5",
-    subject: "Русский язык",
-    question: "Выбери синоним к слову «смелый».",
-    options: ["Боязливый", "Храбрый", "Грустный", "Медленный"],
-    answer: "Храбрый"
+subject:"Русский язык",
+icon:"📚",
+type:"speech",
+q:"Какой частью речи является слово «быстро» в предложении «Он быстро бежал»?",
+a:["Наречием","Существительным","Прилагательным","Глаголом"],
+c:0
 },
 
 {
-    id: "ru6",
-    subject: "Русский язык",
-    question: "Выбери антоним к слову «высокий».",
-    options: ["Большой", "Длинный", "Низкий", "Широкий"],
-    answer: "Низкий"
+subject:"Русский язык",
+icon:"📚",
+type:"punct",
+q:"Как правильно расставить знаки: Мама сказала Иди домой.",
+a:[
+"Мама сказала: «Иди домой».",
+"Мама сказала, «Иди домой».",
+"Мама сказала — Иди домой.",
+"Мама сказала «Иди домой»."
+],
+c:0
 },
 
 {
-    id: "ru7",
-    subject: "Русский язык",
-    question: "Выбери синоним к слову «быстрый».",
-    options: ["Скорый", "Тяжёлый", "Тихий", "Маленький"],
-    answer: "Скорый"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово является существительным?",
+a:["Река","Бежать","Красивый","Быстро"],
+c:0
 },
 
 {
-    id: "ru8",
-    subject: "Русский язык",
-    question: "Какой вариант написан правильно?",
-    options: [
-        "Мама сказала иди домой.",
-        "Мама сказала: «Иди домой».",
-        "Мама сказала «Иди домой».",
-        "Мама, сказала: иди домой."
-    ],
-    answer: "Мама сказала: «Иди домой»."
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Выбери правильное написание.",
+a:["чувство","чуство","чувсттво","чувсво"],
+c:0
 },
 
 {
-    id: "ru9",
-    subject: "Русский язык",
-    question: "В каком слове нет буквы «о»?",
-    options: ["Молоко", "Карандаш", "Река", "Окно"],
-    answer: "Река"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово написано правильно?",
+a:["праздник","празник","праздникк","празникк"],
+c:0
 },
 
 {
-    id: "ru10",
-    subject: "Русский язык",
-    question: "Как правильно написать слово?",
-    options: ["Празник", "Праздник", "Прасдник", "Праздникк"],
-    answer: "Праздник"
+subject:"Русский язык",
+icon:"📚",
+type:"punct",
+q:"Какой знак ставится в конце вопросительного предложения?",
+a:["?","!",";",":"],
+c:0
 },
 
 {
-    id: "ru11",
-    subject: "Русский язык",
-    question: "Как правильно написать выражение?",
-    options: [
-        "Притворить мечту",
-        "Претворить мечту",
-        "Претварить мечту",
-        "Притварить мечту"
-    ],
-    answer: "Претворить мечту"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Что обозначает корень слова?",
+a:[
+"Общую значимую часть родственных слов",
+"Окончание",
+"Только первый звук",
+"Знак препинания"
+],
+c:0
 },
 
 {
-    id: "ru12",
-    subject: "Русский язык",
-    question: "Как правильно?",
-    options: ["Расказать", "Рассказать", "Расскасать", "Расскозать"],
-    answer: "Рассказать"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово является глаголом?",
+a:["Рисовать","Рисунок","Рисующий","Рисованный"],
+c:0
 },
 
 {
-    id: "ru13",
-    subject: "Русский язык",
-    question: "Выбери правильный вариант: «Мы подошли к ...»",
-    options: ["школа", "школу", "школе", "школой"],
-    answer: "школе"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Выбери правильное написание.",
+a:["растение","ростение","растание","растинение"],
+c:0
 },
 
 {
-    id: "ru14",
-    subject: "Русский язык",
-    question: "Где нужна запятая?",
-    options: [
-        "Когда наступил вечер мы вернулись домой.",
-        "Когда наступил вечер, мы вернулись домой.",
-        "Когда, наступил вечер мы вернулись домой.",
-        "Когда наступил, вечер мы вернулись домой."
-    ],
-    answer: "Когда наступил вечер, мы вернулись домой."
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово имеет приставку?",
+a:["подлететь","лето","лётчик","лёт"],
+c:0
 },
 
 {
-    id: "ru15",
-    subject: "Русский язык",
-    question: "Что означает выражение «зарубить на носу»?",
-    options: [
-        "Ударить себя",
-        "Запомнить",
-        "Найти ошибку",
-        "Уйти домой"
-    ],
-    answer: "Запомнить"
+subject:"Русский язык",
+icon:"📚",
+type:"punct",
+q:"Какое предложение является восклицательным?",
+a:["Как красиво!","Как красиво.","Как красиво?","Как красиво,"],
+c:0
 },
 
 {
-    id: "ru16",
-    subject: "Русский язык",
-    question: "Как правильно написать слово?",
-    options: [
-        "Бесшумный",
-        "Безшумный",
-        "Бесшумныйй",
-        "Бишшумный"
-    ],
-    answer: "Бесшумный"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Как правильно написать слово?",
+a:["интересный","интиресный","интересныйй","ентересный"],
+c:0
 },
 
 {
-    id: "ru17",
-    subject: "Русский язык",
-    question: "Какое слово написано правильно?",
-    options: [
-        "Преувеличивать",
-        "Приувеличивать",
-        "Преувиличивать",
-        "Приувиличивать"
-    ],
-    answer: "Преувеличивать"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово лишнее?",
+a:["Стол","Стул","Шкаф","Бежать"],
+c:3
 },
 
 {
-    id: "ru18",
-    subject: "Русский язык",
-    question: "Как правильно сказать?",
-    options: [
-        "Ихний дом",
-        "Их дом",
-        "Ихнийх дом",
-        "Ихова дом"
-    ],
-    answer: "Их дом"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какой частью речи является слово «синий»?",
+a:["Прилагательным","Глаголом","Наречием","Местоимением"],
+c:0
 },
 
 {
-    id: "ru19",
-    subject: "Русский язык",
-    question: "Где нужна запятая?",
-    options: [
-        "Я думаю что он придёт.",
-        "Я думаю, что он придёт.",
-        "Я, думаю что он придёт.",
-        "Я думаю что, он придёт."
-    ],
-    answer: "Я думаю, что он придёт."
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Как правильно: «не с кем» или «нескем»?",
+a:["не с кем","нескем","неcкем","ни с кем"],
+c:0
 },
 
 {
-    id: "ru20",
-    subject: "Русский язык",
-    question: "Что означает слово «лаконичный»?",
-    options: [
-        "Краткий и выразительный",
-        "Очень громкий",
-        "Запутанный",
-        "Смешной"
-    ],
-    answer: "Краткий и выразительный"
+subject:"Русский язык",
+icon:"📚",
+type:"word",
+q:"Какое слово является однокоренным слову «лес»?",
+a:["лесной","лестница","лист","лёд"],
+c:0
 },
 
 
-/* =========================================================
-   МАТЕМАТИКА — 20
-========================================================= */
+/* ================= МАТЕМАТИКА ================= */
 
 {
-    id: "math1",
-    subject: "Математика",
-    question: "Сколько будет 48 ÷ 6?",
-    options: ["6", "7", "8", "9"],
-    answer: "8"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Сколько будет 7 × 8?",
+a:["56","54","64","48"],
+c:0
 },
 
 {
-    id: "math2",
-    subject: "Математика",
-    question: "Сколько будет 27 + 35?",
-    options: ["52", "62", "72", "58"],
-    answer: "62"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Сколько будет 144 ÷ 12?",
+a:["12","14","10","11"],
+c:0
 },
 
 {
-    id: "math3",
-    subject: "Математика",
-    question: "Сколько будет 90 − 37?",
-    options: ["43", "53", "63", "57"],
-    answer: "53"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Чему равна половина числа 86?",
+a:["43","42","44","46"],
+c:0
 },
 
 {
-    id: "math4",
-    subject: "Математика",
-    question: "Сколько будет 12 × 7?",
-    options: ["72", "84", "96", "78"],
-    answer: "84"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Какое число является простым?",
+a:["17","21","27","33"],
+c:0
 },
 
 {
-    id: "math5",
-    subject: "Математика",
-    question: "Чему равны 25% от 200?",
-    options: ["25", "40", "50", "75"],
-    answer: "50"
+subject:"Математика",
+icon:"🧮",
+type:"geometry",
+q:"Сколько градусов составляет прямой угол?",
+a:["90°","45°","180°","360°"],
+c:0
 },
 
 {
-    id: "math6",
-    subject: "Математика",
-    question: "Чему равны 10% от 350?",
-    options: ["25", "30", "35", "40"],
-    answer: "35"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Чему равно 15²?",
+a:["225","215","250","125"],
+c:0
 },
 
 {
-    id: "math7",
-    subject: "Математика",
-    question: "Какое число является наибольшим?",
-    options: ["0,7", "0,17", "0,71", "0,107"],
-    answer: "0,71"
+subject:"Математика",
+icon:"🧮",
+type:"equation",
+q:"Если x + 18 = 35, чему равен x?",
+a:["17","13","16","18"],
+c:0
 },
 
 {
-    id: "math8",
-    subject: "Математика",
-    question: "Сколько будет 3² + 4²?",
-    options: ["12", "20", "25", "49"],
-    answer: "25"
+subject:"Математика",
+icon:"🧮",
+type:"measure",
+q:"Сколько сантиметров в 2 метрах?",
+a:["200","20","2000","120"],
+c:0
 },
 
 {
-    id: "math9",
-    subject: "Математика",
-    question: "Чему равна половина числа 86?",
-    options: ["41", "42", "43", "44"],
-    answer: "43"
+subject:"Математика",
+icon:"🧮",
+type:"fraction",
+q:"Какая дробь равна 1/2?",
+a:["2/4","3/5","4/6","5/8"],
+c:0
 },
 
 {
-    id: "math10",
-    subject: "Математика",
-    question: "Сколько минут в 2 часах?",
-    options: ["100", "110", "120", "140"],
-    answer: "120"
+subject:"Математика",
+icon:"🧮",
+type:"geometry",
+q:"Периметр квадрата со стороной 6 см равен…",
+a:["24 см","12 см","36 см","18 см"],
+c:0
 },
 
 {
-    id: "math11",
-    subject: "Математика",
-    question: "Реши: 5 × (6 + 2).",
-    options: ["30", "35", "40", "45"],
-    answer: "40"
+subject:"Математика",
+icon:"🧮",
+type:"clock",
+q:"Сколько минут в 2 часах?",
+a:["120","100","90","180"],
+c:0
 },
 
 {
-    id: "math12",
-    subject: "Математика",
-    question: "Какую дробь можно сократить до 1/2?",
-    options: ["2/4", "3/5", "4/6", "5/8"],
-    answer: "2/4"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Чему равно 3 × (5 + 2)?",
+a:["21","17","16","24"],
+c:0
 },
 
 {
-    id: "math13",
-    subject: "Математика",
-    question: "Периметр квадрата со стороной 6 см равен:",
-    options: ["12 см", "18 см", "24 см", "36 см"],
-    answer: "24 см"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Какое число делится на 3?",
+a:["27","25","26","28"],
+c:0
 },
 
 {
-    id: "math14",
-    subject: "Математика",
-    question: "Площадь прямоугольника 5 см × 8 см равна:",
-    options: ["13 см²", "26 см²", "40 см²", "45 см²"],
-    answer: "40 см²"
+subject:"Математика",
+icon:"🧮",
+type:"geometry",
+q:"Площадь прямоугольника 5 см × 8 см равна…",
+a:["40 см²","26 см²","13 см²","80 см²"],
+c:0
 },
 
 {
-    id: "math15",
-    subject: "Математика",
-    question: "Если x + 7 = 19, чему равен x?",
-    options: ["10", "11", "12", "13"],
-    answer: "12"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Сколько будет 1000 − 375?",
+a:["625","635","675","615"],
+c:0
 },
 
 {
-    id: "math16",
-    subject: "Математика",
-    question: "Сколько будет 144 ÷ 12?",
-    options: ["10", "11", "12", "14"],
-    answer: "12"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Какое число больше: 0,7 или 0,65?",
+a:["0,7","0,65","Они равны","Невозможно определить"],
+c:0
 },
 
 {
-    id: "math17",
-    subject: "Математика",
-    question: "У Маши было 100 рублей. Она потратила 35 рублей. Сколько осталось?",
-    options: ["55", "65", "75", "85"],
-    answer: "65"
+subject:"Математика",
+icon:"🧮",
+type:"geometry",
+q:"Сколько граней у куба?",
+a:["6","8","12","4"],
+c:0
 },
 
 {
-    id: "math18",
-    subject: "Математика",
-    question: "Какое число делится и на 3, и на 5?",
-    options: ["14", "20", "30", "32"],
-    answer: "30"
+subject:"Математика",
+icon:"🧮",
+type:"percent",
+q:"Чему равны 25% от 200?",
+a:["50","25","75","100"],
+c:0
 },
 
 {
-    id: "math19",
-    subject: "Математика",
-    question: "Сколько будет 2,5 + 1,5?",
-    options: ["3", "4", "4,5", "5"],
-    answer: "4"
+subject:"Математика",
+icon:"🧮",
+type:"numbers",
+q:"Продолжи ряд: 2, 4, 8, 16, …",
+a:["32","24","30","20"],
+c:0
 },
 
 {
-    id: "math20",
-    subject: "Математика",
-    question: "В коробке 24 карандаша. Их разделили поровну между 6 детьми. Сколько получил каждый?",
-    options: ["3", "4", "5", "6"],
-    answer: "4"
+subject:"Математика",
+icon:"🧮",
+type:"geometry",
+q:"Сколько сторон у правильного шестиугольника?",
+a:["6","5","7","8"],
+c:0
 },
 
 
-/* =========================================================
-   ИСТОРИЯ РОССИИ — 20
-========================================================= */
+/* ================= ИСТОРИЯ ================= */
 
 {
-    id: "hist1",
-    subject: "История России",
-    question: "Кто считается основателем Москвы согласно традиционной версии?",
-    options: ["Юрий Долгорукий", "Иван Грозный", "Пётр I", "Александр Невский"],
-    answer: "Юрий Долгорукий"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто крестил Русь в 988 году?",
+a:["Князь Владимир","Иван Грозный","Пётр I","Ярослав Мудрый"],
+c:0
 },
 
 {
-    id: "hist2",
-    subject: "История России",
-    question: "В каком году произошло Крещение Руси?",
-    options: ["862", "988", "1147", "1242"],
-    answer: "988"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Как назывался первый русский царь?",
+a:["Иван IV","Пётр I","Иван III","Алексей Михайлович"],
+c:0
 },
 
 {
-    id: "hist3",
-    subject: "История России",
-    question: "Кто крестил Русь?",
-    options: ["Князь Владимир", "Иван Калита", "Пётр I", "Ярослав Мудрый"],
-    answer: "Князь Владимир"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Какой город был столицей Древнерусского государства?",
+a:["Киев","Москва","Новгород","Суздаль"],
+c:0
 },
 
 {
-    id: "hist4",
-    subject: "История России",
-    question: "Кто был известен как Александр Невский?",
-    options: [
-        "Князь и полководец",
-        "Русский художник",
-        "Император",
-        "Учёный"
-    ],
-    answer: "Князь и полководец"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто основал Санкт-Петербург?",
+a:["Пётр I","Екатерина II","Иван IV","Александр I"],
+c:0
 },
 
 {
-    id: "hist5",
-    subject: "История России",
-    question: "В каком году произошла Невская битва?",
-    options: ["1240", "1242", "1380", "1480"],
-    answer: "1240"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"В каком году началась Великая Отечественная война?",
+a:["1941","1939","1945","1940"],
+c:0
 },
 
 {
-    id: "hist6",
-    subject: "История России",
-    question: "В каком году состоялось Ледовое побоище?",
-    options: ["1237", "1240", "1242", "1380"],
-    answer: "1242"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто командовал русской армией в Бородинском сражении?",
+a:["Михаил Кутузов","Александр Суворов","Михаил Барклай-де-Толли","Пётр Румянцев"],
+c:0
 },
 
 {
-    id: "hist7",
-    subject: "История России",
-    question: "Кто победил в Куликовской битве 1380 года?",
-    options: [
-        "Войско Дмитрия Донского",
-        "Войско Наполеона",
-        "Шведское войско",
-        "Римская армия"
-    ],
-    answer: "Войско Дмитрия Донского"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"В каком году была Куликовская битва?",
+a:["1380","1240","1480","1612"],
+c:0
 },
 
 {
-    id: "hist8",
-    subject: "История России",
-    question: "Кто был первым русским царём?",
-    options: [
-        "Иван IV",
-        "Пётр I",
-        "Иван III",
-        "Николай II"
-    ],
-    answer: "Иван IV"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто был первым человеком в космосе?",
+a:["Юрий Гагарин","Алексей Леонов","Нил Армстронг","Валентина Терешкова"],
+c:0
 },
 
 {
-    id: "hist9",
-    subject: "История России",
-    question: "Как прозвали Ивана IV?",
-    options: ["Мудрый", "Грозный", "Красный", "Тихий"],
-    answer: "Грозный"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Как назывался свод законов Древней Руси?",
+a:["Русская Правда","Судебник","Соборное уложение","Домострой"],
+c:0
 },
 
 {
-    id: "hist10",
-    subject: "История России",
-    question: "Кто основал Санкт-Петербург?",
-    options: ["Пётр I", "Иван IV", "Екатерина II", "Александр I"],
-    answer: "Пётр I"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто стал первым российским императором?",
+a:["Пётр I","Иван IV","Павел I","Николай I"],
+c:0
 },
 
 {
-    id: "hist11",
-    subject: "История России",
-    question: "В каком году был основан Санкт-Петербург?",
-    options: ["1703", "1721", "1762", "1812"],
-    answer: "1703"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Какой город называют «городом на Неве»?",
+a:["Санкт-Петербург","Москва","Казань","Тула"],
+c:0
 },
 
 {
-    id: "hist12",
-    subject: "История России",
-    question: "С каким событием связан 1812 год?",
-    options: [
-        "Отечественная война с Наполеоном",
-        "Крещение Руси",
-        "Куликовская битва",
-        "Основание Москвы"
-    ],
-    answer: "Отечественная война с Наполеоном"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто написал роман «Война и мир»?",
+a:["Лев Толстой","Фёдор Достоевский","Иван Тургенев","Антон Чехов"],
+c:0
 },
 
 {
-    id: "hist13",
-    subject: "История России",
-    question: "Кто командовал русской армией в Отечественной войне 1812 года?",
-    options: [
-        "Михаил Кутузов",
-        "Александр Суворов",
-        "Георгий Жуков",
-        "Дмитрий Донской"
-    ],
-    answer: "Михаил Кутузов"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Какое событие произошло в 1812 году?",
+a:[
+"Отечественная война с Наполеоном",
+"Крещение Руси",
+"Куликовская битва",
+"Основание Санкт-Петербурга"
+],
+c:0
 },
 
 {
-    id: "hist14",
-    subject: "История России",
-    question: "В каком году началась Великая Отечественная война?",
-    options: ["1939", "1941", "1943", "1945"],
-    answer: "1941"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто командовал одним из главных советских фронтов при взятии Берлина в 1945 году?",
+a:["Георгий Жуков","Михаил Кутузов","Александр Суворов","Фёдор Ушаков"],
+c:0
 },
 
 {
-    id: "hist15",
-    subject: "История России",
-    question: "В каком году закончилась Великая Отечественная война?",
-    options: ["1943", "1944", "1945", "1946"],
-    answer: "1945"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Как назывался первый искусственный спутник Земли?",
+a:["Спутник-1","Восток-1","Союз-1","Луна-1"],
+c:0
 },
 
 {
-    id: "hist16",
-    subject: "История России",
-    question: "Кто был первым человеком в космосе?",
-    options: [
-        "Юрий Гагарин",
-        "Алексей Леонов",
-        "Нил Армстронг",
-        "Сергей Королёв"
-    ],
-    answer: "Юрий Гагарин"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто был известен как великий русский полководец XVIII века?",
+a:["Александр Суворов","Иван Грозный","Николай Пирогов","Михаил Ломоносов"],
+c:0
 },
 
 {
-    id: "hist17",
-    subject: "История России",
-    question: "В каком году Юрий Гагарин совершил первый полёт в космос?",
-    options: ["1957", "1961", "1965", "1971"],
-    answer: "1961"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"В каком городе находится Кремль — главный символ российской столицы?",
+a:["Москва","Санкт-Петербург","Новгород","Владимир"],
+c:0
 },
 
 {
-    id: "hist18",
-    subject: "История России",
-    question: "Кто был известным конструктором советской ракетно-космической техники?",
-    options: [
-        "Сергей Королёв",
-        "Иван Павлов",
-        "Дмитрий Менделеев",
-        "Илья Репин"
-    ],
-    answer: "Сергей Королёв"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Кто была первой женщиной-космонавтом?",
+a:["Валентина Терешкова","Светлана Савицкая","Елена Кондакова","Анна Ли"],
+c:0
 },
 
 {
-    id: "hist19",
-    subject: "История России",
-    question: "Как назывался период начала XVII века с борьбой за власть и иностранной интервенцией?",
-    options: [
-        "Смутное время",
-        "Золотой век",
-        "Оттепель",
-        "Перестройка"
-    ],
-    answer: "Смутное время"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Как назывался период освобождения Москвы от польско-литовских войск в 1612 году?",
+a:["Второе ополчение","Смутное войско","Северный поход","Земский поход"],
+c:0
 },
 
 {
-    id: "hist20",
-    subject: "История России",
-    question: "Кто возглавлял народное ополчение 1612 года вместе с Кузьмой Мининым?",
-    options: [
-        "Дмитрий Пожарский",
-        "Александр Невский",
-        "Михаил Кутузов",
-        "Пётр I"
-    ],
-    answer: "Дмитрий Пожарский"
+subject:"История России",
+icon:"🏛️",
+type:"history",
+q:"Какой русский учёный связан с созданием периодической таблицы химических элементов?",
+a:["Дмитрий Менделеев","Иван Павлов","Николай Лобачевский","Сергей Королёв"],
+c:0
 },
 
 
-/* =========================================================
-   ГЕОГРАФИЯ — 20
-========================================================= */
+/* ================= ГЕОГРАФИЯ ================= */
 
 {
-    id: "geo1",
-    subject: "География",
-    question: "Какая страна является самой большой по площади?",
-    options: ["Россия", "Канада", "Китай", "США"],
-    answer: "Россия"
+subject:"География",
+icon:"🌍",
+type:"earth",
+q:"Какой океан самый большой?",
+a:["Тихий","Атлантический","Индийский","Северный Ледовитый"],
+c:0
 },
 
 {
-    id: "geo2",
-    subject: "География",
-    question: "Какой океан самый большой?",
-    options: [
-        "Атлантический",
-        "Индийский",
-        "Северный Ледовитый",
-        "Тихий"
-    ],
-    answer: "Тихий"
+subject:"География",
+icon:"🌍",
+type:"city",
+q:"Столица России — это…",
+a:["Москва","Санкт-Петербург","Казань","Новосибирск"],
+c:0
 },
 
 {
-    id: "geo3",
-    subject: "География",
-    question: "Столица России — это:",
-    options: ["Москва", "Санкт-Петербург", "Казань", "Новосибирск"],
-    answer: "Москва"
+subject:"География",
+icon:"🌍",
+type:"earth",
+q:"Какой материк самый большой?",
+a:["Евразия","Африка","Северная Америка","Антарктида"],
+c:0
 },
 
 {
-    id: "geo4",
-    subject: "География",
-    question: "Какой материк самый большой?",
-    options: ["Африка", "Евразия", "Австралия", "Антарктида"],
-    answer: "Евразия"
+subject:"География",
+icon:"🌍",
+type:"desert",
+q:"Какая пустыня является крупнейшей жаркой пустыней мира?",
+a:["Сахара","Гоби","Калахари","Атакама"],
+c:0
 },
 
 {
-    id: "geo5",
-    subject: "География",
-    question: "Какая река считается самой длинной в России?",
-    options: ["Волга", "Лена", "Обь", "Енисей"],
-    answer: "Лена"
+subject:"География",
+icon:"🌍",
+type:"river",
+q:"Какая река является крупнейшей в России по длине своего русла в пределах страны?",
+a:["Лена","Волга","Обь","Дон"],
+c:0
 },
 
 {
-    id: "geo6",
-    subject: "География",
-    question: "Какое озеро является самым глубоким в мире?",
-    options: ["Байкал", "Ладожское", "Каспийское море", "Онежское"],
-    answer: "Байкал"
+subject:"География",
+icon:"🌍",
+type:"sea",
+q:"Какое море не имеет берегов России?",
+a:["Средиземное","Чёрное","Балтийское","Охотское"],
+c:0
 },
 
 {
-    id: "geo7",
-    subject: "География",
-    question: "В каком городе находится Эрмитаж?",
-    options: [
-        "Москва",
-        "Санкт-Петербург",
-        "Сочи",
-        "Екатеринбург"
-    ],
-    answer: "Санкт-Петербург"
+subject:"География",
+icon:"🌍",
+type:"mountain",
+q:"Какая гора является самой высокой в России?",
+a:["Эльбрус","Белуха","Казбек","Ключевская Сопка"],
+c:0
 },
 
 {
-    id: "geo8",
-    subject: "География",
-    question: "Какой океан находится между Африкой и Австралией?",
-    options: [
-        "Атлантический",
-        "Индийский",
-        "Тихий",
-        "Северный Ледовитый"
-    ],
-    answer: "Индийский"
+subject:"География",
+icon:"🌍",
+type:"city",
+q:"Столица Франции?",
+a:["Париж","Рим","Берлин","Мадрид"],
+c:0
 },
 
 {
-    id: "geo9",
-    subject: "География",
-    question: "На каком материке находится Египет?",
-    options: ["Африка", "Европа", "Азия", "Южная Америка"],
-    answer: "Африка"
+subject:"География",
+icon:"🌍",
+type:"continent",
+q:"На каком материке находится Египет?",
+a:["Африка","Евразия","Австралия","Южная Америка"],
+c:0
 },
 
 {
-    id: "geo10",
-    subject: "География",
-    question: "Какой материк покрыт льдом почти полностью?",
-    options: ["Африка", "Антарктида", "Евразия", "Австралия"],
-    answer: "Антарктида"
+subject:"География",
+icon:"🌍",
+type:"antarctica",
+q:"Какой материк покрыт почти полностью ледяным щитом?",
+a:["Антарктида","Африка","Евразия","Австралия"],
+c:0
 },
 
 {
-    id: "geo11",
-    subject: "География",
-    question: "Как называется линия, разделяющая Землю на Северное и Южное полушария?",
-    options: [
-        "Экватор",
-        "Меридиан",
-        "Тропик",
-        "Полярный круг"
-    ],
-    answer: "Экватор"
+subject:"География",
+icon:"🌍",
+type:"earth",
+q:"Как называется линия, делящая Землю на Северное и Южное полушария?",
+a:["Экватор","Меридиан","Тропик","Полярный круг"],
+c:0
 },
 
 {
-    id: "geo12",
-    subject: "География",
-    question: "Сколько основных сторон горизонта?",
-    options: ["2", "3", "4", "6"],
-    answer: "4"
+subject:"География",
+icon:"🌍",
+type:"city",
+q:"Столица Японии?",
+a:["Токио","Киото","Осака","Хиросима"],
+c:0
 },
 
 {
-    id: "geo13",
-    subject: "География",
-    question: "В каком направлении восходит Солнце?",
-    options: ["На севере", "На юге", "На западе", "На востоке"],
-    answer: "На востоке"
+subject:"География",
+icon:"🌍",
+type:"country",
+q:"Какая страна имеет форму, напоминающую сапог?",
+a:["Италия","Испания","Греция","Португалия"],
+c:0
 },
 
 {
-    id: "geo14",
-    subject: "География",
-    question: "Какая гора является самой высокой на Земле над уровнем моря?",
-    options: [
-        "Эльбрус",
-        "Эверест",
-        "Килиманджаро",
-        "Монблан"
-    ],
-    answer: "Эверест"
+subject:"География",
+icon:"🌍",
+type:"ocean",
+q:"Какой океан омывает восточное побережье Африки?",
+a:["Индийский","Тихий","Атлантический","Северный Ледовитый"],
+c:0
 },
 
 {
-    id: "geo15",
-    subject: "География",
-    question: "Как называется крупнейшая пустыня Африки?",
-    options: ["Сахара", "Гоби", "Калахари", "Атакама"],
-    answer: "Сахара"
+subject:"География",
+icon:"🌍",
+type:"earth",
+q:"Какая страна самая большая по площади?",
+a:["Россия","Канада","Китай","США"],
+c:0
 },
 
 {
-    id: "geo16",
-    subject: "География",
-    question: "Какая страна находится в форме «сапога»?",
-    options: ["Италия", "Испания", "Греция", "Франция"],
-    answer: "Италия"
+subject:"География",
+icon:"🌍",
+type:"city",
+q:"Столица Германии?",
+a:["Берлин","Мюнхен","Гамбург","Франкфурт"],
+c:0
 },
 
 {
-    id: "geo17",
-    subject: "География",
-    question: "Столица Франции — это:",
-    options: ["Лион", "Марсель", "Париж", "Ницца"],
-    answer: "Париж"
+subject:"География",
+icon:"🌍",
+type:"compass",
+q:"Какой прибор используют для определения сторон горизонта?",
+a:["Компас","Барометр","Термометр","Секундомер"],
+c:0
 },
 
 {
-    id: "geo18",
-    subject: "География",
-    question: "Какое море омывает юг России?",
-    options: [
-        "Чёрное море",
-        "Балтийское море",
-        "Баренцево море",
-        "Белое море"
-    ],
-    answer: "Чёрное море"
+subject:"География",
+icon:"🌍",
+type:"lake",
+q:"Как называется водоём, окружённый со всех сторон сушей?",
+a:["Озеро","Океан","Пролив","Залив"],
+c:0
 },
 
 {
-    id: "geo19",
-    subject: "География",
-    question: "Как называется прибор для определения сторон горизонта?",
-    options: ["Барометр", "Компас", "Термометр", "Секундомер"],
-    answer: "Компас"
+subject:"География",
+icon:"🌍",
+type:"continent",
+q:"Какой материк является самым маленьким?",
+a:["Австралия","Африка","Антарктида","Южная Америка"],
+c:0
 },
 
 {
-    id: "geo20",
-    subject: "География",
-    question: "Какой город является столицей Японии?",
-    options: ["Киото", "Осака", "Токио", "Хиросима"],
-    answer: "Токио"
+subject:"География",
+icon:"🌍",
+type:"river",
+q:"Какая река протекает через Египет?",
+a:["Нил","Амазонка","Волга","Ганг"],
+c:0
 }
 
 ];
 
 
-/* =========================================================
-   НАСТРОЙКИ ИГРЫ
-========================================================= */
+/* =====================================================
+   ИНТЕРЕСНЫЕ ФАКТЫ
+===================================================== */
 
-const QUESTIONS_PER_GAME = 20;
-const QUESTIONS_PER_SUBJECT = 5;
+const facts={
 
-const subjects = [
-    "Русский язык",
-    "Математика",
-    "История России",
-    "География"
-];
+"Русский язык":[
+"В русском языке есть слова-палиндромы — их можно читать одинаково слева направо и справа налево. Например: «топот».",
+"Слово «алфавит» произошло от названий первых букв греческого алфавита — альфа и бета.",
+"В русском языке одна и та же буква может обозначать разные звуки в зависимости от положения в слове.",
+"Самая распространённая буква русского языка — «о».",
+"В русском языке есть слова, состоящие всего из одной буквы: например, «я»."
+],
 
+"Математика":[
+"Ноль — особенное число: он не является ни положительным, ни отрицательным.",
+"У квадрата все четыре стороны одинаковой длины.",
+"Число 2 — единственное чётное простое число.",
+"Символ бесконечности ∞ придумал английский математик Джон Валлис.",
+"Если сложить углы треугольника, получится ровно 180 градусов."
+],
 
-/* =========================================================
-   СОСТОЯНИЕ ИГРЫ
-========================================================= */
+"История России":[
+"Первый искусственный спутник Земли был запущен СССР в 1957 году.",
+"Юрий Гагарин стал первым человеком, совершившим полёт в космос, 12 апреля 1961 года.",
+"Санкт-Петербург был основан Петром I в 1703 году.",
+"Куликовская битва произошла в 1380 году.",
+"Дмитрий Менделеев создал периодическую систему химических элементов."
+],
 
-let currentGameQuestions = [];
-let currentQuestionIndex = 0;
-let score = 0;
-let streak = 0;
-let answered = false;
+"География":[
+"Россия — крупнейшая по площади страна мира.",
+"Россия расположена одновременно в Европе и Азии.",
+"Экватор делит Землю на Северное и Южное полушария.",
+"Тихий океан является крупнейшим океаном Земли.",
+"Антарктида — самый холодный материк нашей планеты."
+]
 
-let subjectStats = {
-    "Русский язык": { correct: 0, total: 0 },
-    "Математика": { correct: 0, total: 0 },
-    "История России": { correct: 0, total: 0 },
-    "География": { correct: 0, total: 0 }
 };
 
 
-/* =========================================================
-   ХРАНЕНИЕ ПРОЙДЕННЫХ ВОПРОСОВ
-========================================================= */
-
-function getUsedQuestions() {
-    try {
-        return JSON.parse(
-            localStorage.getItem("gramoteyUsedQuestions") || "[]"
-        );
-    } catch {
-        return [];
-    }
-}
-
-function saveUsedQuestions(used) {
-    localStorage.setItem(
-        "gramoteyUsedQuestions",
-        JSON.stringify(used)
-    );
-}
-
-function getCycleNumber() {
-    return Number(
-        localStorage.getItem("gramoteyCycle") || "1"
-    );
-}
-
-function saveCycleNumber(number) {
-    localStorage.setItem(
-        "gramoteyCycle",
-        String(number)
-    );
-}
-
-
-/* =========================================================
-   ПЕРЕМЕШИВАНИЕ
-========================================================= */
-
-function shuffle(array) {
-
-    const copy = [...array];
-
-    for (let i = copy.length - 1; i > 0; i--) {
-
-        const j = Math.floor(
-            Math.random() * (i + 1)
-        );
-
-        [copy[i], copy[j]] =
-        [copy[j], copy[i]];
-    }
-
-    return copy;
-}
-
-
-/* =========================================================
-   ПОДГОТОВКА 20 ВОПРОСОВ
-   РОВНО ПО 5 КАЖДОГО ПРЕДМЕТА
-========================================================= */
-
-function createGameQuestions() {
-
-    let usedIds = getUsedQuestions();
-
-    let availableQuestions =
-        questions.filter(q => !usedIds.includes(q.id));
-
-
-    /*
-       Если осталось меньше 5 вопросов
-       какого-либо предмета — начинаем новый цикл.
-    */
-
-    const canMakeFullGame = subjects.every(subject => {
-
-        const count =
-            availableQuestions.filter(
-                q => q.subject === subject
-            ).length;
-
-        return count >= QUESTIONS_PER_SUBJECT;
-    });
-
-
-    if (!canMakeFullGame) {
-
-        usedIds = [];
-
-        saveUsedQuestions([]);
-
-        let newCycle = getCycleNumber() + 1;
-
-        saveCycleNumber(newCycle);
-
-        availableQuestions = [...questions];
-    }
-
-
-    let selected = [];
-
-
-    subjects.forEach(subject => {
-
-        const subjectQuestions =
-            availableQuestions.filter(
-                q => q.subject === subject
-            );
-
-        const shuffled =
-            shuffle(subjectQuestions);
-
-        selected.push(
-            ...shuffled.slice(
-                0,
-                QUESTIONS_PER_SUBJECT
-            )
-        );
-
-    });
-
-
-    /*
-       После выбора 5 вопросов каждого предмета
-       полностью перемешиваем их.
-    */
-
-    return shuffle(selected);
-}
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const startScreen =
-    document.getElementById("startScreen");
-
-const gameScreen =
-    document.getElementById("gameScreen");
-
-const resultScreen =
-    document.getElementById("resultScreen");
-
-const scoreElement =
-    document.getElementById("score");
-
-const streakElement =
-    document.getElementById("streak");
-
-const counterElement =
-    document.getElementById("counter");
-
-const progressBar =
-    document.getElementById("progressBar");
-
-const subjectBadge =
-    document.getElementById("subjectBadge");
-
-const questionNumber =
-    document.getElementById("questionNumber");
-
-const questionElement =
-    document.getElementById("question");
-
-const optionsElement =
-    document.getElementById("options");
-
-const feedbackElement =
-    document.getElementById("feedback");
-
-const nextButton =
-    document.getElementById("nextButton");
-
-
-/* =========================================================
-   НАЧАЛО ИГРЫ
-========================================================= */
-
-function startGame() {
-
-    currentGameQuestions =
-        createGameQuestions();
-
-    currentQuestionIndex = 0;
-
-    score = 0;
-
-    streak = 0;
-
-    answered = false;
-
-
-    subjectStats = {
-        "Русский язык": { correct: 0, total: 0 },
-        "Математика": { correct: 0, total: 0 },
-        "История России": { correct: 0, total: 0 },
-        "География": { correct: 0, total: 0 }
-    };
-
-
-    startScreen.classList.remove("active");
-
-    resultScreen.classList.remove("active");
-
-    gameScreen.classList.add("active");
-
-
-    showQuestion();
-}
-
-
-/* =========================================================
-   ПОКАЗ ВОПРОСА
-========================================================= */
-
-function showQuestion() {
-
-    answered = false;
-
-    const q =
-        currentGameQuestions[currentQuestionIndex];
-
-
-    subjectBadge.textContent =
-        q.subject;
-
-
-    questionNumber.textContent =
-        "Вопрос " +
-        (currentQuestionIndex + 1) +
-        " из " +
-        QUESTIONS_PER_GAME;
-
-
-    questionElement.textContent =
-        q.question;
-
-
-    scoreElement.textContent =
-        score;
-
-
-    streakElement.textContent =
-        streak;
-
-
-    counterElement.textContent =
-        (currentQuestionIndex + 1) +
-        " / " +
-        QUESTIONS_PER_GAME;
-
-
-    progressBar.style.width =
-        (
-            currentQuestionIndex /
-            QUESTIONS_PER_GAME *
-            100
-        ) + "%";
-
-
-    optionsElement.innerHTML = "";
-
-
-    feedbackElement.textContent = "";
-
-
-    nextButton.style.display =
-        "none";
-
-
-    /*
-       ВАЖНО:
-       Копируем варианты и перемешиваем.
-       Поэтому правильный ответ каждый раз
-       оказывается в другом месте.
-    */
-
-    const shuffledOptions =
-        shuffle(q.options);
-
-
-    shuffledOptions.forEach(option => {
-
-        const button =
-            document.createElement("button");
-
-        button.className =
-            "option";
-
-        button.textContent =
-            option;
-
-
-        button.onclick = function() {
-
-            checkAnswer(
-                button,
-                option,
-                q.answer
-            );
-
-        };
-
-
-        optionsElement.appendChild(button);
-
-    });
+/* =====================================================
+   SVG-ИЛЛЮСТРАЦИИ
+===================================================== */
+
+function svgIllustration(type){
+
+const base=(content,bg="#111a38")=>`
+<svg viewBox="0 0 800 300"
+xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="${bg}"/>
+  <stop offset="1" stop-color="#080d20"/>
+ </linearGradient>
+ <filter id="shadow">
+  <feDropShadow dx="0" dy="12" stdDeviation="12"
+  flood-color="#000" flood-opacity=".35"/>
+ </filter>
+</defs>
+<rect width="800" height="300" fill="url(#g)"/>
+${content}
+</svg>`;
+
+if(type==="numbers")
+return base(`
+<g filter="url(#shadow)" font-family="Arial" font-weight="900">
+<text x="145" y="190" font-size="105" fill="#5b8cff">7</text>
+<text x="295" y="190" font-size="75" fill="#9b70ff">×</text>
+<text x="400" y="190" font-size="105" fill="#4de7ff">8</text>
+<text x="545" y="190" font-size="75" fill="#ffd766">=</text>
+<text x="625" y="190" font-size="80" fill="#fff">?</text>
+</g>`);
+
+if(type==="geometry")
+return base(`
+<g filter="url(#shadow)">
+<rect x="260" y="65" width="170" height="170" rx="8"
+fill="none" stroke="#5b8cff" stroke-width="10"/>
+<circle cx="345" cy="150" r="65"
+fill="none" stroke="#4de7ff" stroke-width="5"
+stroke-dasharray="8 10"/>
+<path d="M470 230 L570 70 L670 230 Z"
+fill="none" stroke="#9b70ff" stroke-width="8"/>
+</g>`);
+
+if(type==="fraction")
+return base(`
+<g font-family="Arial" font-weight="900" text-anchor="middle">
+<text x="330" y="125" font-size="82" fill="#fff">1</text>
+<line x1="285" y1="150" x2="375" y2="150" stroke="#4de7ff" stroke-width="8"/>
+<text x="330" y="220" font-size="82" fill="#fff">2</text>
+<text x="430" y="180" font-size="65" fill="#9b70ff">=</text>
+<text x="550" y="125" font-size="65" fill="#5b8cff">2</text>
+<line x1="515" y1="150" x2="590" y2="150" stroke="#4de7ff" stroke-width="7"/>
+<text x="550" y="215" font-size="65" fill="#5b8cff">4</text>
+</g>`);
+
+if(type==="equation")
+return base(`
+<g font-family="Arial" font-weight="900" text-anchor="middle">
+<text x="230" y="185" font-size="85" fill="#fff">x + 18</text>
+<text x="430" y="185" font-size="70" fill="#9b70ff">=</text>
+<text x="560" y="185" font-size="85" fill="#4de7ff">35</text>
+</g>`);
+
+if(type==="percent")
+return base(`
+<g font-family="Arial" font-weight="900" text-anchor="middle">
+<circle cx="400" cy="150" r="92"
+fill="none" stroke="#27345d" stroke-width="22"/>
+<path d="M400 58 A92 92 0 0 1 492 150"
+fill="none" stroke="#4de7ff" stroke-width="22"/>
+<text x="400" y="170" font-size="62" fill="#fff">25%</text>
+</g>`);
+
+if(type==="clock")
+return base(`
+<g filter="url(#shadow)">
+<circle cx="400" cy="150" r="95" fill="#151f3d"
+stroke="#5b8cff" stroke-width="9"/>
+<line x1="400" y1="150" x2="400" y2="88"
+stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+<line x1="400" y1="150" x2="455" y2="178"
+stroke="#4de7ff" stroke-width="9" stroke-linecap="round"/>
+<circle cx="400" cy="150" r="10" fill="#ffd766"/>
+</g>`);
+
+if(type==="letters"||type==="word"||type==="letter"||type==="speech"||type==="punct")
+return base(`
+<g filter="url(#shadow)" font-family="Arial" font-weight="900" text-anchor="middle">
+<rect x="170" y="70" width="460" height="165" rx="25"
+fill="#151f3d" stroke="#4de7ff" stroke-width="4"/>
+<text x="400" y="180" font-size="92" fill="#fff">
+${type==="punct"?"?!":"А Б В Г"}
+</text>
+<circle cx="205" cy="105" r="10" fill="#5b8cff"/>
+<circle cx="595" cy="105" r="10" fill="#9b70ff"/>
+</g>`);
+
+if(type==="history")
+return base(`
+<g filter="url(#shadow)">
+<rect x="240" y="95" width="320" height="130" rx="10"
+fill="#1d294b" stroke="#ffd766" stroke-width="5"/>
+<path d="M220 95 L580 95 L545 60 L255 60 Z"
+fill="#ffd766"/>
+<path d="M275 95 L275 220 M335 95 L335 220
+M400 95 L400 220 M465 95 L465 220
+M525 95 L525 220"
+stroke="#ffd766" stroke-width="10"/>
+</g>
+<text x="400" y="270" text-anchor="middle"
+font-family="Arial" font-weight="bold"
+font-size="28" fill="#fff">ИСТОРИЯ РОССИИ</text>`);
+
+if(type==="earth")
+return base(`
+<g filter="url(#shadow)">
+<circle cx="400" cy="150" r="100"
+fill="#176cbb" stroke="#4de7ff" stroke-width="6"/>
+<path d="M325 110 Q365 85 390 120 T465 105
+Q500 130 475 155 T450 205
+Q410 220 380 185 T330 175 Z"
+fill="#49df99"/>
+<path d="M310 150 Q400 115 490 150"
+fill="none" stroke="#fff" opacity=".35" stroke-width="3"/>
+</g>`);
+
+if(type==="city")
+return base(`
+<g filter="url(#shadow)" fill="#5b8cff">
+<rect x="180" y="150" width="75" height="75"/>
+<rect x="270" y="105" width="85" height="120"/>
+<rect x="370" y="135" width="80" height="90"/>
+<rect x="465" y="80" width="100" height="145"/>
+</g>
+<g fill="#ffd766">
+<rect x="200" y="170" width="15" height="15"/>
+<rect x="295" y="125" width="15" height="15"/>
+<rect x="395" y="155" width="15" height="15"/>
+<rect x="500" y="105" width="15" height="15"/>
+</g>`);
+
+if(type==="desert")
+return base(`
+<path d="M0 235 Q150 100 300 220 T600 205 T800 190 V300 H0Z"
+fill="#d99451"/>
+<circle cx="610" cy="75" r="40" fill="#ffd766"/>
+<path d="M330 240 Q350 180 370 240
+M365 240 Q400 175 430 240"
+stroke="#49df99" stroke-width="10" fill="none"/>`);
+
+if(type==="river")
+return base(`
+<path d="M120 40
+C280 110 250 160 380 145
+C500 130 470 230 680 255"
+fill="none" stroke="#4de7ff" stroke-width="25"
+stroke-linecap="round"/>
+<circle cx="130" cy="42" r="28" fill="#5b8cff"/>
+<circle cx="680" cy="255" r="34" fill="#49df99"/>`);
+
+if(type==="sea"||type==="ocean")
+return base(`
+<path d="M0 180 Q70 130 140 180 T280 180
+T420 180 T560 180 T700 180 T840 180
+V300 H0Z"
+fill="#145b9e"/>
+<path d="M0 190 Q70 140 140 190 T280 190
+T420 190 T560 190 T700 190 T840 190"
+fill="none" stroke="#4de7ff" stroke-width="7"/>
+<circle cx="610" cy="70" r="42" fill="#ffd766"/>`);
+
+if(type==="mountain")
+return base(`
+<path d="M90 240 L300 65 L390 155 L480 80 L710 240 Z"
+fill="#26365d"/>
+<path d="M300 65 L340 115 L300 100 L265 130 Z"
+fill="#fff"/>
+<path d="M480 80 L525 130 L485 115 L450 145 Z"
+fill="#fff"/>
+<path d="M90 240 L300 65 L390 240 Z"
+fill="#334c78"/>
+<path d="M390 240 L480 80 L710 240 Z"
+fill="#273a61"/>`);
+
+if(type==="continent")
+return base(`
+<path d="M190 95 Q300 40 390 90
+Q490 50 620 120
+L590 205 Q500 230 420 195
+Q320 235 225 190 Z"
+fill="#49df99" stroke="#4de7ff" stroke-width="5"/>
+<circle cx="650" cy="65" r="32" fill="#ffd766"/>`);
+
+if(type==="antarctica")
+return base(`
+<path d="M140 185 Q220 120 310 160
+Q390 105 480 155 Q570 110 660 190
+Q570 245 470 220 Q370 255 270 220 Q190 245 140 185Z"
+fill="#e9f8ff" stroke="#4de7ff" stroke-width="6"/>
+<circle cx="610" cy="65" r="32" fill="#bcecff"/>`);
+
+if(type==="country")
+return base(`
+<path d="M385 45 L425 75 L410 115
+L450 150 L420 190 L440 240
+L390 215 L365 170 L350 125
+L365 85 Z"
+fill="#49df99" stroke="#4de7ff" stroke-width="5"/>
+<text x="500" y="165" font-family="Arial"
+font-size="38" font-weight="bold" fill="#fff">ITALIA</text>`);
+
+if(type==="compass")
+return base(`
+<circle cx="400" cy="150" r="100"
+fill="#151f3d" stroke="#4de7ff" stroke-width="6"/>
+<path d="M400 65 L430 150 L400 235 L370 150 Z"
+fill="#ff627a"/>
+<path d="M400 65 L370 150 L400 235 L430 150 Z"
+fill="#5b8cff"/>
+<text x="400" y="45" text-anchor="middle"
+font-size="28" fill="#fff">N</text>
+<text x="400" y="275" text-anchor="middle"
+font-size="28" fill="#fff">S</text>`);
+
+if(type==="lake")
+return base(`
+<path d="M180 150
+C230 70 350 90 390 145
+C440 215 570 190 620 120
+C670 190 560 245 450 220
+C330 190 260 230 180 150Z"
+fill="#176cbb" stroke="#4de7ff" stroke-width="6"/>
+<circle cx="640" cy="60" r="35" fill="#ffd766"/>`);
+
+return base(`
+<text x="400" y="180"
+text-anchor="middle"
+font-family="Arial"
+font-size="90"
+font-weight="900"
+fill="#4de7ff">?</text>`);
 
 }
 
 
-/* =========================================================
-   ПРОВЕРКА ОТВЕТА
-========================================================= */
+/* =====================================================
+   ЛОГИКА
+===================================================== */
 
-function checkAnswer(
-    selectedButton,
-    selectedAnswer,
-    correctAnswer
-) {
+const $=id=>document.getElementById(id);
 
-    if (answered) return;
+const screens={
+ start:$("startScreen"),
+ game:$("gameScreen"),
+ rest:$("restScreen"),
+ result:$("resultScreen")
+};
 
-    answered = true;
+const TOTAL=20;
+const PER_SUBJECT=5;
+const USED_KEY="gramotey10_used_v4";
 
+let game=[];
+let current=0;
+let score=0;
+let streak=0;
+let maxStreak=0;
+let restNumber=0;
 
-    const currentQuestion =
-        currentGameQuestions[
-            currentQuestionIndex
-        ];
-
-
-    const allButtons =
-        document.querySelectorAll(".option");
-
-
-    allButtons.forEach(button => {
-
-        button.disabled = true;
+let stats={};
 
 
-        if (
-            button.textContent ===
-            correctAnswer
-        ) {
+function shuffle(arr){
 
-            button.classList.add(
-                "correct"
-            );
+ arr=[...arr];
 
-        }
+ for(let i=arr.length-1;i>0;i--){
 
-    });
+  const j=Math.floor(Math.random()*(i+1));
 
+  [arr[i],arr[j]]=[arr[j],arr[i]];
 
-    subjectStats[
-        currentQuestion.subject
-    ].total++;
+ }
+
+ return arr;
+}
 
 
-    if (
-        selectedAnswer ===
-        correctAnswer
-    ) {
+function getUsed(){
 
-        selectedButton.classList.add(
-            "correct"
-        );
-
-
-        streak++;
-
-
-        let points = 10;
-
-
-        /*
-           Бонус за серию:
-           начиная с третьего правильного ответа
-           +5 дополнительных очков.
-        */
-
-        if (streak >= 3) {
-
-            points += 5;
-
-        }
-
-
-        score += points;
-
-
-        subjectStats[
-            currentQuestion.subject
-        ].correct++;
-
-
-        feedbackElement.textContent =
-            "Правильно! +" +
-            points +
-            " очков";
-
-
-        if (streak >= 3) {
-
-            feedbackElement.textContent +=
-                " — серия " +
-                streak +
-                "!";
-
-        }
-
-    } else {
-
-        selectedButton.classList.add(
-            "wrong"
-        );
-
-
-        streak = 0;
-
-
-        feedbackElement.textContent =
-            "Неверно. Правильный ответ: " +
-            correctAnswer;
-
-    }
-
-
-    scoreElement.textContent =
-        score;
-
-
-    streakElement.textContent =
-        streak;
-
-
-    nextButton.style.display =
-        "inline-block";
+ try{
+  return JSON.parse(localStorage.getItem(USED_KEY)||"[]");
+ }catch(e){
+  return [];
+ }
 
 }
 
 
-/* =========================================================
-   СЛЕДУЮЩИЙ ВОПРОС
-========================================================= */
+function saveUsed(ids){
 
-function nextQuestion() {
-
-    currentQuestionIndex++;
-
-
-    if (
-        currentQuestionIndex >=
-        QUESTIONS_PER_GAME
-    ) {
-
-        finishGame();
-
-        return;
-
-    }
-
-
-    showQuestion();
+ localStorage.setItem(
+  USED_KEY,
+  JSON.stringify(ids)
+ );
 
 }
 
 
-/* =========================================================
-   ЗАВЕРШЕНИЕ ИГРЫ
-========================================================= */
+function createGame(){
 
-function finishGame() {
+ const subjects=[
+  "Русский язык",
+  "Математика",
+  "История России",
+  "География"
+ ];
 
-    /*
-       Добавляем текущие вопросы
-       в список использованных.
-    */
+ let used=new Set(getUsed());
+ let selected=[];
 
-    let usedIds =
-        getUsedQuestions();
+ for(const subject of subjects){
 
+  let pool=questions
+   .map((q,i)=>({...q,id:i}))
+   .filter(q=>
+    q.subject===subject &&
+    !used.has(q.id)
+   );
 
-    currentGameQuestions.forEach(q => {
+  /*
+   Если вопросы данного предмета закончились,
+   начинается новый цикл именно для этого предмета.
+  */
 
-        if (!usedIds.includes(q.id)) {
+  if(pool.length<PER_SUBJECT){
 
-            usedIds.push(q.id);
+   pool=questions
+    .map((q,i)=>({...q,id:i}))
+    .filter(q=>q.subject===subject);
 
-        }
+  }
 
-    });
+  selected.push(
+   ...shuffle(pool).slice(0,PER_SUBJECT)
+  );
 
+ }
 
-    /*
-       Если использованы все 80 вопросов,
-       следующий запуск начнёт новый цикл.
-    */
-
-    if (
-        usedIds.length >=
-        questions.length
-    ) {
-
-        usedIds = [];
-
-        saveCycleNumber(
-            getCycleNumber() + 1
-        );
-
-    }
-
-
-    saveUsedQuestions(usedIds);
-
-
-    gameScreen.classList.remove(
-        "active"
-    );
-
-    resultScreen.classList.add(
-        "active"
-    );
-
-
-    progressBar.style.width =
-        "100%";
-
-
-    document.getElementById(
-        "finalScore"
-    ).textContent =
-        score + " очков";
-
-
-    /*
-       Результаты по предметам
-    */
-
-    document.getElementById(
-        "russianResult"
-    ).textContent =
-        subjectStats["Русский язык"].correct +
-        " / 5";
-
-
-    document.getElementById(
-        "mathResult"
-    ).textContent =
-        subjectStats["Математика"].correct +
-        " / 5";
-
-
-    document.getElementById(
-        "historyResult"
-    ).textContent =
-        subjectStats["История России"].correct +
-        " / 5";
-
-
-    document.getElementById(
-        "geographyResult"
-    ).textContent =
-        subjectStats["География"].correct +
-        " / 5";
-
-
-    /*
-       Звёзды
-    */
-
-    let stars = "";
-
-    if (score >= 260) {
-
-        stars = "★★★★★";
-
-    } else if (score >= 220) {
-
-        stars = "★★★★☆";
-
-    } else if (score >= 170) {
-
-        stars = "★★★☆☆";
-
-    } else if (score >= 100) {
-
-        stars = "★★☆☆☆";
-
-    } else {
-
-        stars = "★☆☆☆☆";
-
-    }
-
-
-    document.getElementById(
-        "stars"
-    ).textContent = stars;
-
-
-    /*
-       Текст результата
-    */
-
-    let resultMessage = "";
-
-
-    if (score >= 260) {
-
-        resultMessage =
-            "Отличный результат! Ты уверенно справился с заданиями.";
-
-    } else if (score >= 220) {
-
-        resultMessage =
-            "Очень хороший результат. Ещё немного практики — и будет ещё лучше.";
-
-    } else if (score >= 170) {
-
-        resultMessage =
-            "Хорошая работа. Некоторые темы стоит повторить.";
-
-    } else if (score >= 100) {
-
-        resultMessage =
-            "Неплохое начало. Продолжай тренироваться.";
-
-    } else {
-
-        resultMessage =
-            "Попробуй ещё раз. Новая игра даст тебе новые вопросы.";
-
-    }
-
-
-    document.getElementById(
-        "resultMessage"
-    ).textContent =
-        resultMessage;
-
-
-    /*
-       Информация о цикле
-    */
-
-    const usedCount =
-        getUsedQuestions().length;
-
-
-    const cycle =
-        getCycleNumber();
-
-
-    if (usedCount === 0) {
-
-        document.getElementById(
-            "cycleInfo"
-        ).textContent =
-            "Все 80 вопросов пройдены. Начат новый цикл №" +
-            cycle +
-            ".";
-
-    } else {
-
-        document.getElementById(
-            "cycleInfo"
-        ).textContent =
-            "В текущем цикле уже пройдено " +
-            usedCount +
-            " из 80 вопросов.";
-
-    }
+ return shuffle(selected);
 
 }
 
 
-/* =========================================================
-   НОВАЯ ИГРА
-========================================================= */
+function showScreen(name){
 
-function restartGame() {
+ Object.values(screens).forEach(
+  s=>s.classList.remove("active")
+ );
 
-    resultScreen.classList.remove(
-        "active"
-    );
+ screens[name].classList.add("active");
 
-    startGame();
+ window.scrollTo({
+  top:0,
+  behavior:"smooth"
+ });
 
 }
+
+
+function startGame(){
+
+ game=createGame();
+
+ current=0;
+ score=0;
+ streak=0;
+ maxStreak=0;
+ restNumber=0;
+
+ stats={};
+
+ [
+  "Русский язык",
+  "Математика",
+  "История России",
+  "География"
+ ].forEach(subject=>{
+  stats[subject]={
+   right:0,
+   total:0
+  };
+ });
+
+ $("score").textContent="0";
+ $("streak").textContent="0 ×";
+
+ showScreen("game");
+
+ renderQuestion();
+
+}
+
+
+function renderQuestion(){
+
+ const q=game[current];
+
+ $("counter").textContent=
+  `${current+1} / ${TOTAL}`;
+
+ $("qNumber").textContent=
+  `ВОПРОС ${String(current+1).padStart(2,"0")}`;
+
+ $("progressBar").style.width=
+  `${current/TOTAL*100}%`;
+
+ $("subject").textContent=
+  `${q.icon} ${q.subject}`;
+
+ $("question").textContent=q.q;
+
+ $("illustration").innerHTML=
+  svgIllustration(q.type);
+
+ $("feedback").textContent="";
+ $("feedback").className="feedback";
+
+ $("nextBtn").style.display="none";
+
+ const answers=$("answers");
+
+ answers.innerHTML="";
+
+ const prepared=
+  shuffle(
+   q.a.map((text,index)=>({
+    text,
+    index
+   }))
+  );
+
+ prepared.forEach((item,pos)=>{
+
+  const button=
+   document.createElement("button");
+
+  button.className="answer";
+
+  button.innerHTML=`
+   <span class="letter">
+    ${String.fromCharCode(65+pos)}
+   </span>
+   <span>${item.text}</span>
+  `;
+
+  button.onclick=()=>{
+   checkAnswer(
+    button,
+    item.index,
+    q
+   );
+  };
+
+  answers.appendChild(button);
+
+ });
+
+}
+
+
+function checkAnswer(button,choice,q){
+
+ const buttons=[
+  ...$("answers").children
+ ];
+
+ buttons.forEach(
+  b=>b.disabled=true
+ );
+
+ const correct=
+  choice===q.c;
+
+ stats[q.subject].total++;
+
+ if(correct){
+
+  stats[q.subject].right++;
+
+  streak++;
+
+  maxStreak=
+   Math.max(maxStreak,streak);
+
+  let gained=10;
+
+  if(streak>=3){
+   gained+=5;
+  }
+
+  score+=gained;
+
+  button.classList.add("correct");
+
+  $("feedback").textContent=
+   `✓ Правильно! +${gained} очков`;
+
+  $("feedback").className=
+   "feedback good";
+
+  $("streak").textContent=
+   `${streak} ×`;
+
+  if(streak>=3){
+   celebrate(8);
+  }
+
+ }else{
+
+  streak=0;
+
+  button.classList.add("wrong");
+
+  $("feedback").textContent=
+   `✕ Правильный ответ: ${q.a[q.c]}`;
+
+  $("feedback").className=
+   "feedback bad";
+
+  $("streak").textContent=
+   "0 ×";
+
+  const correctButton=
+   buttons.find(
+    b=>b.textContent.includes(q.a[q.c])
+   );
+
+  if(correctButton){
+   correctButton.classList.add("correct");
+  }
+
+  $("questionCard").classList.add("shake");
+
+  setTimeout(()=>{
+   $("questionCard")
+    .classList.remove("shake");
+  },400);
+
+ }
+
+ $("score").textContent=score;
+
+ $("nextBtn").style.display=
+  "inline-block";
+
+}
+
+
+function nextQuestion(){
+
+ current++;
+
+ /*
+  После 5, 10 и 15 вопросов
+  показываем комнату отдыха.
+ */
+
+ if(
+  current===5 ||
+  current===10 ||
+  current===15
+ ){
+
+  showRest();
+
+  return;
+
+ }
+
+ if(current>=TOTAL){
+
+  finishGame();
+
+  return;
+
+ }
+
+ renderQuestion();
+
+}
+
+
+function showRest(){
+
+ restNumber++;
+
+ const subject=
+  game[current-1].subject;
+
+ const list=
+  facts[subject]||facts["География"];
+
+ const fact=
+  list[
+   Math.floor(
+    Math.random()*list.length
+   )
+  ];
+
+ $("fact").innerHTML=
+  `«${fact}»`;
+
+ showScreen("rest");
+
+}
+
+
+function continueGame(){
+
+ if(current>=TOTAL){
+
+  finishGame();
+
+  return;
+
+ }
+
+ renderQuestion();
+
+ showScreen("game");
+
+}
+
+
+function finishGame(){
+
+ $("progressBar").style.width="100%";
+
+ const used=
+  new Set(getUsed());
+
+ game.forEach(q=>{
+  used.add(q.id);
+ });
+
+ saveUsed([...used]);
+
+ let stars=1;
+
+ if(score>=260)stars=5;
+ else if(score>=220)stars=4;
+ else if(score>=170)stars=3;
+ else if(score>=100)stars=2;
+
+ $("finalScore").textContent=
+  score;
+
+ $("stars").textContent=
+  "★".repeat(stars)+
+  "☆".repeat(5-stars);
+
+ $("trophy").textContent=
+  stars===5
+   ?"👑"
+   :stars===4
+    ?"🏆"
+    :stars===3
+     ?"🥇"
+     :"🎯";
+
+ let resultText="";
+
+ if(stars===5){
+  resultText=
+   "Фантастический результат! Ты настоящий Грамотей!";
+ }else if(stars===4){
+  resultText=
+   "Отличная игра! Знания становятся сильнее с каждой попыткой.";
+ }else if(stars===3){
+  resultText=
+   "Хороший результат. Попробуй ещё раз и побей свой рекорд.";
+ }else{
+  resultText=
+   "Хорошее начало. Новая игра даст тебе шанс улучшить результат.";
+ }
+
+ $("resultText").textContent=
+  resultText;
+
+
+ const icons={
+  "Русский язык":"📚",
+  "Математика":"🧮",
+  "История России":"🏛️",
+  "География":"🌍"
+ };
+
+ $("resultGrid").innerHTML=
+  Object.entries(stats)
+  .map(([subject,data])=>`
+
+   <div class="result-item">
+
+    <div class="ri">
+     ${icons[subject]}
+    </div>
+
+    <b>${subject}</b>
+
+    <span>
+     ${data.right}
+     из
+     ${data.total}
+    </span>
+
+   </div>
+
+  `)
+  .join("");
+
+
+ const achievements=[];
+
+ if(score>=200)
+  achievements.push("⚡ 200+ очков");
+
+ if(maxStreak>=5)
+  achievements.push("🔥 Серия ×5");
+
+ if(maxStreak>=10)
+  achievements.push("🔥 Серия ×10");
+
+ if(
+  Object.values(stats)
+  .some(x=>x.right===5)
+ )
+  achievements.push("🎓 Знаток предмета");
+
+ if(stars===5)
+  achievements.push("👑 Настоящий Грамотей");
+
+ if(achievements.length===0)
+  achievements.push("🌟 Первый шаг");
+
+ $("achievements").innerHTML=
+  achievements
+  .map(x=>`
+   <div class="achievement">
+    ${x}
+   </div>
+  `)
+  .join("");
+
+ showScreen("result");
+
+ celebrate(45);
+
+}
+
+
+/* =====================================================
+   КОНФЕТТИ
+===================================================== */
+
+function celebrate(count){
+
+ for(let i=0;i<count;i++){
+
+  const p=
+   document.createElement("i");
+
+  p.className="confetti";
+
+  p.style.left=
+   Math.random()*100+"vw";
+
+  p.style.setProperty(
+   "--x",
+   (Math.random()*240-120)+"px"
+  );
+
+  p.style.animationDuration=
+   (1.5+Math.random()*1.8)+"s";
+
+  p.style.background=[
+   "#5b8cff",
+   "#4de7ff",
+   "#9b70ff",
+   "#49df99",
+   "#ffd766",
+   "#ff627a"
+  ][
+   Math.floor(Math.random()*6)
+  ];
+
+  document.body.appendChild(p);
+
+  setTimeout(
+   ()=>p.remove(),
+   3500
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   КНОПКИ
+===================================================== */
+
+$("startBtn").onclick=
+ startGame;
+
+$("nextBtn").onclick=
+ nextQuestion;
+
+$("continueBtn").onclick=
+ continueGame;
+
+$("againBtn").onclick=
+ startGame;
+
+
+/* Эффект нажатия */
+
+document.addEventListener(
+ "click",
+ event=>{
+
+  const button=
+   event.target.closest("button");
+
+  if(!button)return;
+
+  const ripple=
+   document.createElement("i");
+
+  ripple.style.position="absolute";
+  ripple.style.borderRadius="50%";
+  ripple.style.background=
+   "rgba(255,255,255,.3)";
+  ripple.style.width="80px";
+  ripple.style.height="80px";
+  ripple.style.left=
+   (event.clientX-button.getBoundingClientRect().left-40)+"px";
+  ripple.style.top=
+   (event.clientY-button.getBoundingClientRect().top-40)+"px";
+  ripple.style.pointerEvents="none";
+
+  button.style.position="relative";
+  button.style.overflow="hidden";
+
+  button.appendChild(ripple);
+
+  ripple.animate(
+   [
+    {transform:"scale(0)",opacity:.7},
+    {transform:"scale(3)",opacity:0}
+   ],
+   {
+    duration:600,
+    easing:"ease-out"
+   }
+  );
+
+  setTimeout(
+   ()=>ripple.remove(),
+   650
+  );
+
+ }
+);
 
 </script>
 
